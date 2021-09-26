@@ -1,5 +1,4 @@
 rootProject.name = 'orbis'
 include 'math'
-include 'engine'
 include 'app'
 

@@ -7,10 +7,10 @@ public interface IVector4f<V extends IVector4f<V>> {
     V sub(V vector);
     V mul(V vector);
     V mul(float scalar);
-    V cross(V vector);
+//    V cross(V vector);
     float dot(V vector);
     float normSquared();
     float norm();
-    V persDiv();
+    <T extends IVector3f<T>> T persDiv();
     float[] toArray();
 }

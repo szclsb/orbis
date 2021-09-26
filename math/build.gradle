@@ -14,6 +14,11 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
+compileJava {
+    options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
+}
+
 test {
+    jvmArgs('--add-modules', 'jdk.incubator.vector')
     useJUnitPlatform()
 }
