@@ -8,11 +8,11 @@ public class Vector3f implements IVector3f<Vector3f> {
     final float[] data;
 
     public Vector3f() {
-        this.data = new float[2];
+        this.data = new float[SIZE];
     }
 
-    public Vector3f(float x, float y) {
-        this.data = new float[] {x, y};
+    public Vector3f(float x, float y, float z) {
+        this.data = new float[] {x, y, z};
     }
 
 //    float get(int index) {

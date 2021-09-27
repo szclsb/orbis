@@ -1,6 +1,5 @@
 package ch.szclsb.orbis.math.jni;
 
-import ch.szclsb.orbis.math.IVector3f;
 import ch.szclsb.orbis.math.IVector4f;
 import ch.szclsb.orbis.math.MathUtils;
 
@@ -9,11 +8,11 @@ public class Vector4f implements IVector4f<Vector4f> {
     private final float[] data;
 
     public Vector4f() {
-        this.data = new float[2];
+        this.data = new float[SIZE];
     }
 
-    public Vector4f(float x, float y) {
-        this.data = new float[] {x, y};
+    public Vector4f(float x, float y, float z, float w) {
+        this.data = new float[] {x, y, z, w};
     }
 
     @Override

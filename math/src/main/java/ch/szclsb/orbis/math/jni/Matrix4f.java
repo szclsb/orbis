@@ -1,10 +1,6 @@
 package ch.szclsb.orbis.math.jni;
 
-import ch.szclsb.orbis.math.IMat4f;
-import ch.szclsb.orbis.math.IVector4f;
-import ch.szclsb.orbis.math.MathUtils;
-
-public class Matrix4f implements IMat4f<Matrix4f> {
+public class Matrix4f {
     static {
         System.load(System.getProperty("user.dir") + "/libs/orbis_matrix4.dll");
     }
@@ -47,26 +43,22 @@ public class Matrix4f implements IMat4f<Matrix4f> {
         System.arraycopy(mat.data, 0, this.data, 0, SIZE);
     }
 
-    @Override
     public Matrix4f add(Matrix4f mat) {
         var result = new Matrix4f();
         cAdd(data, mat.data, result.data);
         return result;
     }
 
-    @Override
     public Matrix4f sub(Matrix4f mat) {
         var result = new Matrix4f();
         cSub(data, mat.data, result.data);
         return result;
     }
 
-    @Override
     public Matrix4f times(Matrix4f mat) {
         return times(mat, false);
     }
 
-    @Override
     public Matrix4f times(Matrix4f mat, boolean elementwise) {
         var result = new Matrix4f();
         if (!elementwise) {
@@ -77,14 +69,12 @@ public class Matrix4f implements IMat4f<Matrix4f> {
         return result;
     }
 
-    @Override
     public Matrix4f times(float s) {
         var result = new Matrix4f();
         cMul(data, s, result.data);
         return result;
     }
 
-    @Override
     public float[] toArray() {
         var buffer = new float[SIZE];
         System.arraycopy(data, 0, buffer, 0, SIZE);
@@ -94,7 +84,7 @@ public class Matrix4f implements IMat4f<Matrix4f> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Matrix4f mat) {
-            return cEqualsC(data, mat.data, MathUtils.TOLERANCE);
+            return cEqualsC(data, mat.data, 0.000001f);
         }
         return false;
     }
