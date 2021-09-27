@@ -51,7 +51,7 @@ public class Vector4f implements IVector4f<Vector4f> {
     }
 
     @Override
-    public Vector4f mul(Vector4f vec) {
+    public Vector4f times(Vector4f vec) {
         return new Vector4f(
                 x * vec.x,
                 y * vec.y,
@@ -61,7 +61,7 @@ public class Vector4f implements IVector4f<Vector4f> {
     }
 
     @Override
-    public Vector4f mul(float s) {
+    public Vector4f times(float s) {
         return new Vector4f(
                 x * s,
                 y * s,

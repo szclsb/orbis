@@ -52,7 +52,7 @@ public class Vector3f implements IVector3f<Vector3f> {
     }
 
     @Override
-    public Vector3f mul(Vector3f vec) {
+    public Vector3f times(Vector3f vec) {
         return new Vector3f(
                 x * vec.x,
                 y * vec.y,
@@ -61,7 +61,7 @@ public class Vector3f implements IVector3f<Vector3f> {
     }
 
     @Override
-    public Vector3f mul(float s) {
+    public Vector3f times(float s) {
         return new Vector3f(
                 x * s,
                 y * s,

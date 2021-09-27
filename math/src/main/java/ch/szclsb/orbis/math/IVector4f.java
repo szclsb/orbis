@@ -5,8 +5,8 @@ import ch.szclsb.orbis.math.simd.Vector4f;
 public interface IVector4f<V extends IVector4f<V>> {
     V add(V vector);
     V sub(V vector);
-    V mul(V vector);
-    V mul(float scalar);
+    V times(V vector);
+    V times(float scalar);
 //    V cross(V vector);
     float dot(V vector);
     float normSquared();

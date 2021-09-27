@@ -35,12 +35,12 @@ public class Vector2f implements IVector2f<Vector2f> {
     }
 
     @Override
-    public Vector2f mul(Vector2f vector) {
+    public Vector2f times(Vector2f vector) {
         return new Vector2f(data.mul(vector.data));
     }
 
     @Override
-    public Vector2f mul(float scale) {
+    public Vector2f times(float scale) {
         return new Vector2f(data.mul(scale));
     }
 

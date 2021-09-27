@@ -38,11 +38,11 @@ public class Vector4fTest {
     }
 
     @Test
-    public void testMultiply() {
+    public void testTimes() {
         var a = new Vector4f(1f, 2f, 3f, 4f);
         var b = new Vector4f(5f, 6f, 7f, 8f);
 
-        assertEquals(new Vector4f(5f, 12f, 21f, 32f), a.mul(b));
+        assertEquals(new Vector4f(5f, 12f, 21f, 32f), a.times(b));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class Vector4fTest {
         var a = new Vector4f(1f, 2f, 3f, 4f);
         var s = 5f;
 
-        assertEquals(new Vector4f(5f, 10f, 15f, 20f), a.mul(s));
+        assertEquals(new Vector4f(5f, 10f, 15f, 20f), a.times(s));
     }
 
     @Test

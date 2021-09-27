@@ -31,14 +31,14 @@ public class Vector4f implements IVector4f<Vector4f> {
     }
 
     @Override
-    public Vector4f mul(Vector4f vector) {
+    public Vector4f times(Vector4f vector) {
         var result = new Vector4f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, vector.data);
         return result;
     }
 
     @Override
-    public Vector4f mul(float scalar) {
+    public Vector4f times(float scalar) {
         var result = new Vector4f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, scalar);
         return result;

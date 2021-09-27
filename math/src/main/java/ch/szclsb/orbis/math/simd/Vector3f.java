@@ -33,12 +33,12 @@ public class Vector3f implements IVector3f<Vector3f> {
     }
 
     @Override
-    public Vector3f mul(Vector3f vector) {
+    public Vector3f times(Vector3f vector) {
         return new Vector3f(data.mul(vector.data));
     }
 
     @Override
-    public Vector3f mul(float scale) {
+    public Vector3f times(float scale) {
         return new Vector3f(data.mul(scale));
     }
 

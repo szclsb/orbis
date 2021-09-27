@@ -39,11 +39,11 @@ public class Vector3fTest {
     }
 
     @Test
-    public void testMultiply() {
+    public void testTimes() {
         var a = new Vector3f(1f, 2f, 3f);
         var b = new Vector3f(4f, 5f, 6f);
 
-        assertEquals(new Vector3f(4f, 10f, 18f), a.mul(b));
+        assertEquals(new Vector3f(4f, 10f, 18f), a.times(b));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class Vector3fTest {
         var a = new Vector3f(1f, 2f, 3f);
         var s = 4f;
 
-        assertEquals(new Vector3f(4f, 8f, 12f), a.mul(s));
+        assertEquals(new Vector3f(4f, 8f, 12f), a.times(s));
     }
 
     @Test

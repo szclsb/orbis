@@ -31,12 +31,12 @@ public class Vector4f implements IVector4f<Vector4f> {
     }
 
     @Override
-    public Vector4f mul(Vector4f vector) {
+    public Vector4f times(Vector4f vector) {
         return new Vector4f(data.mul(vector.data));
     }
 
     @Override
-    public Vector4f mul(float scalar) {
+    public Vector4f times(float scalar) {
         return new Vector4f(data.mul(scalar));
     }
 

@@ -32,12 +32,12 @@ public class Vector2f implements IVector2f<Vector2f> {
     }
 
     @Override
-    public Vector2f mul(Vector2f vec) {
+    public Vector2f times(Vector2f vec) {
         return new Vector2f(x * vec.x, y * vec.y);
     }
 
     @Override
-    public Vector2f mul(float s) {
+    public Vector2f times(float s) {
         return new Vector2f(x * s, y * s);
     }
 

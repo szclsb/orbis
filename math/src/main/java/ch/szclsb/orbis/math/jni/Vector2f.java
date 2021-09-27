@@ -30,14 +30,14 @@ public class Vector2f implements IVector2f<Vector2f> {
     }
 
     @Override
-    public Vector2f mul(Vector2f vector) {
+    public Vector2f times(Vector2f vector) {
         var result = new Vector2f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, vector.data);
         return result;
     }
 
     @Override
-    public Vector2f mul(float scalar) {
+    public Vector2f times(float scalar) {
         var result = new Vector2f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, scalar);
         return result;

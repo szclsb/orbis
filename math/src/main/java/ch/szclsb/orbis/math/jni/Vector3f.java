@@ -15,6 +15,25 @@ public class Vector3f implements IVector3f<Vector3f> {
         this.data = new float[] {x, y};
     }
 
+//    float get(int index) {
+//        if (index < 0 || index >= SIZE) {
+//            throw new IllegalArgumentException("accessing index out of vector");
+//        }
+//        return data[index];
+//    }
+
+    public float getX() {
+        return data[0];
+    }
+
+    public float getY() {
+        return data[1];
+    }
+
+    public float getZ() {
+        return data[2];
+    }
+
     @Override
     public Vector3f add(Vector3f vector) {
         var result = new Vector3f();
@@ -30,14 +49,14 @@ public class Vector3f implements IVector3f<Vector3f> {
     }
 
     @Override
-    public Vector3f mul(Vector3f vector) {
+    public Vector3f times(Vector3f vector) {
         var result = new Vector3f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, vector.data);
         return result;
     }
 
     @Override
-    public Vector3f mul(float scalar) {
+    public Vector3f times(float scalar) {
         var result = new Vector3f();
         JniVectorAPI.cMul(SIZE, result.data, this.data, scalar);
         return result;
