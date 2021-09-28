@@ -1,10 +1,14 @@
 package ch.szclsb.orbis.math.simd;
 
 import ch.szclsb.orbis.math.MathUtils;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("SIMD")
+@Tag("Vector4f")
+@Tag("UnitTest")
 public class SimdVector4fTest {
     @Test
     public void testEquals() {

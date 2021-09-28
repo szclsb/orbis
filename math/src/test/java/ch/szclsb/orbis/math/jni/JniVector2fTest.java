@@ -1,10 +1,14 @@
 package ch.szclsb.orbis.math.jni;
 
 import ch.szclsb.orbis.math.MathUtils;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("JNI")
+@Tag("Vector2f")
+@Tag("UnitTest")
 public class JniVector2fTest {
     @Test
     public void testEquals() {

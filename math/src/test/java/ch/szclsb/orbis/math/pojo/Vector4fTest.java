@@ -1,10 +1,14 @@
 package ch.szclsb.orbis.math.pojo;
 
 import ch.szclsb.orbis.math.MathUtils;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("POJO")
+@Tag("Vector4f")
+@Tag("UnitTest")
 public class Vector4fTest {
     @Test
     public void testEquals() {

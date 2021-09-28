@@ -2,10 +2,14 @@ package ch.szclsb.orbis.math.simd;
 
 import ch.szclsb.orbis.math.MathUtils;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("SIMD")
+@Tag("Vector3f")
+@Tag("UnitTest")
 public class SimdVector3fTest {
     @Test
     public void testEquals() {

@@ -20,5 +20,17 @@ compileJava {
 
 test {
     jvmArgs('--add-modules', 'jdk.incubator.vector')
-    useJUnitPlatform()
+    useJUnitPlatform() {
+        includeTags "UnitTest"
+    }
 }
+
+tasks.register("performanceTest", Test) {
+    jvmArgs('--add-modules', 'jdk.incubator.vector')
+    useJUnitPlatform() {
+        includeTags "PerformanceTest"
+    }
+    mustRunAfter test
+}
+
+

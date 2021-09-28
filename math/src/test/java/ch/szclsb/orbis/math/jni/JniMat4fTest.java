@@ -1,10 +1,14 @@
 package ch.szclsb.orbis.math.jni;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@Tag("JNI")
+@Tag("Matrix4f")
+@Tag("UnitTest")
 public class JniMat4fTest {
     @Test
     public void testEquals() {
