@@ -15,6 +15,11 @@ public class Vector2f implements IVector2f<Vector2f> {
         this.data = new float[] {x, y};
     }
 
+    Vector2f(float[] data) {
+        this.data = new float[SIZE];
+        System.arraycopy(data, 0, this.data, 0, SIZE);
+    }
+
     @Override
     public Vector2f add(Vector2f vector) {
         var result = new Vector2f();

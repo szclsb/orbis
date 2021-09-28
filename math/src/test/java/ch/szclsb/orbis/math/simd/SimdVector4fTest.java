@@ -1,11 +1,11 @@
-package ch.szclsb.orbis.math.jni;
+package ch.szclsb.orbis.math.simd;
 
 import ch.szclsb.orbis.math.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Vector4fTest {
+public class SimdVector4fTest {
     @Test
     public void testEquals() {
         var a = new Vector4f(1f, 2f, 3f, 4f);

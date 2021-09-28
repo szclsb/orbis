@@ -5,7 +5,7 @@ import ch.szclsb.orbis.math.MathUtils;
 
 public class Vector3f implements IVector3f<Vector3f> {
     private static final int SIZE = 3;
-    final float[] data;
+    private final float[] data;
 
     public Vector3f() {
         this.data = new float[SIZE];
@@ -13,6 +13,11 @@ public class Vector3f implements IVector3f<Vector3f> {
 
     public Vector3f(float x, float y, float z) {
         this.data = new float[] {x, y, z};
+    }
+
+    Vector3f(float[] data) {
+        this.data = new float[SIZE];
+        System.arraycopy(data, 0, this.data, 0, SIZE);
     }
 
 //    float get(int index) {

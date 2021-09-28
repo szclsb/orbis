@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Vector2fTest {
+public class JniVector2fTest {
     @Test
     public void testEquals() {
         var a = new Vector2f(1f, 2f);

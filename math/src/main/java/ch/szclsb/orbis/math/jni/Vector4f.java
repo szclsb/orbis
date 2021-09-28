@@ -1,5 +1,6 @@
 package ch.szclsb.orbis.math.jni;
 
+import ch.szclsb.orbis.math.IVector3f;
 import ch.szclsb.orbis.math.IVector4f;
 import ch.szclsb.orbis.math.MathUtils;
 
@@ -13,6 +14,34 @@ public class Vector4f implements IVector4f<Vector4f> {
 
     public Vector4f(float x, float y, float z, float w) {
         this.data = new float[] {x, y, z, w};
+    }
+
+    Vector4f(float[] data) {
+        this.data = new float[SIZE];
+        System.arraycopy(data, 0, this.data, 0, SIZE);
+    }
+
+//    float get(int index) {
+//        if (index < 0 || index >= SIZE) {
+//            throw new IllegalArgumentException("accessing index out of vector");
+//        }
+//        return data[index];
+//    }
+
+    public float getX() {
+        return data[0];
+    }
+
+    public float getY() {
+        return data[1];
+    }
+
+    public float getZ() {
+        return data[2];
+    }
+
+    public float getW() {
+        return data[3];
     }
 
     @Override
@@ -61,9 +90,9 @@ public class Vector4f implements IVector4f<Vector4f> {
     @Override
     @SuppressWarnings("unchecked")
     public Vector3f persDiv() {
-        var result = new Vector3f();
-        JniVectorAPI.cMul(3, result.data, this.data, 1f / data[3]);
-        return result;
+        var result = new float[SIZE];
+        JniVectorAPI.cMul(SIZE,  result, data, 1 / data[3]);
+        return new Vector3f(result);
     }
 
     @Override

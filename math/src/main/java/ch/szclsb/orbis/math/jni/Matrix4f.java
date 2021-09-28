@@ -1,8 +1,11 @@
 package ch.szclsb.orbis.math.jni;
 
-public class Matrix4f {
+import ch.szclsb.orbis.math.IMat4f;
+import ch.szclsb.orbis.math.MathUtils;
+
+public class Matrix4f implements IMat4f<Matrix4f> {
     static {
-        System.load(System.getProperty("user.dir") + "/libs/orbis_matrix4.dll");
+        System.load(System.getProperty("user.dir") + "/libs/orbis_native.dll");
     }
 
     private static final int SIZE = 16;
@@ -84,7 +87,7 @@ public class Matrix4f {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Matrix4f mat) {
-            return cEqualsC(data, mat.data, 0.000001f);
+            return cEqualsC(data, mat.data, MathUtils.TOLERANCE);
         }
         return false;
     }

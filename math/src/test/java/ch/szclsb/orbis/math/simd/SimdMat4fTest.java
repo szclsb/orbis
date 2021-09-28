@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class Mat4fTest {
+public class SimdMat4fTest {
     @Test
     public void testEquals() {
         var A = new Matrix4f(1f, 2f, 3f, 4f,

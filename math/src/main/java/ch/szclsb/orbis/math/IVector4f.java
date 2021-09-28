@@ -1,7 +1,5 @@
 package ch.szclsb.orbis.math;
 
-import ch.szclsb.orbis.math.simd.Vector4f;
-
 public interface IVector4f<V extends IVector4f<V>> {
     V add(V vector);
     V sub(V vector);
