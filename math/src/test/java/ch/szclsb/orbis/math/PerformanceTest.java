@@ -902,9 +902,10 @@ public class PerformanceTest {
 
     private static void print(Class<?> vClass, String name, long time) {
         var packageName = vClass.getPackageName();
-        var innerPkgName = packageName.substring(packageName.lastIndexOf('.'));
+        var innerPkgName = packageName.substring(packageName.lastIndexOf('.') + 1).toUpperCase();
         var className = vClass.getSimpleName();
-        System.out.printf("%s %s operation %s x10e6 took %d ms%n", innerPkgName, className, name, time);
-        System.out.printf("%s %s Operation %s avg   took %f.3 ms%n", innerPkgName, className, name, ((1f * time) / ITERATIONS));
+//        System.out.printf("%-4s %-8s operation %-20s x10e6 took %-8d ms%n", innerPkgName, className, name, time);
+        System.out.printf("%-4s %-8s Operation %-20s x%.1e took %8.1f ns per operation%n",
+                innerPkgName, className, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 }
