@@ -7,7 +7,6 @@ import jdk.incubator.vector.*;
 public class Matrix4f implements IMat4f<Matrix4f> {
     private static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_512;
     private static final VectorSpecies<Float> SPECIES_DIM = FloatVector.SPECIES_128;
-
     private static final VectorShuffle<Float> TRANSPOSE = VectorShuffle.fromValues(SPECIES,
             0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15);
 
@@ -60,15 +59,16 @@ public class Matrix4f implements IMat4f<Matrix4f> {
     public Matrix4f times(Matrix4f mat, boolean elementwise) {
         if (!elementwise) {
             var resultArray = new float[SIZE];
-            var tMat = mat.transpose();
+            var array = data.toArray();
+            var tArray = mat.transpose().toArray();
             // cache columns of matrix to add
-            var cols = new FloatVector[4];
+            var cols = new FloatVector[DIM];
             for (var i = 0; i < DIM; i++) {
-                cols[i] = (FloatVector) tMat.data.castShape(SPECIES_DIM, i);
+                cols[i] = FloatVector.fromArray(SPECIES_DIM, tArray, i * DIM);
             }
             // calc matrix multiplication
             for (var i = 0; i < DIM; i++) {
-                var row = (FloatVector) data.castShape(SPECIES_DIM, i);
+                var row = FloatVector.fromArray(SPECIES_DIM, array, i * DIM);
                 for (var j = 0; j < DIM; j++) {
                      resultArray[i * DIM + j] = row.mul(cols[j]).reduceLanes(VectorOperators.ADD);
                 }
