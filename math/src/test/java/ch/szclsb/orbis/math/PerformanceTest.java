@@ -454,6 +454,28 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("PFW")
+            public void testPojoFW() {
+                var a = createVector4f(pojoVector4fClass, 1f, 2f, 3f, 4f);
+                var b = createVector4f(pojoVector4fClass, -3f, -7f, -21f, -93f);
+                var r = createVector4f(pojoVector4fClass, 0f, 0f, 0f, 0f);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.pojo.Vector4f.add(a, b, r);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.pojo.Vector4f.add(a, b, r);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.pojo.Vector4f.add(a, b, r);
+                }
+                var time = end - start;
+                print(pojoVector4fClass, "add static", time);
+            }
+
+            @Test
             @Tag("POJA")
             public void testPoja() {
                 testAdd(pojaVector4fClass);
@@ -463,6 +485,28 @@ public class PerformanceTest {
             @Tag("SIMD")
             public void testSimd() {
                 testAdd(simdVector4fClass);
+            }
+
+            @Test
+            @Tag("SFW")
+            public void tesSimdFW() {
+                var a = createVector4f(simdVector4fClass, 1f, 2f, 3f, 4f);
+                var b = createVector4f(simdVector4fClass, -3f, -7f, -21f, -93f);
+                var r = createVector4f(simdVector4fClass, 0f, 0f, 0f, 0f);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.simd.Vector4f.add(a, b, r);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.simd.Vector4f.add(a, b, r);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    ch.szclsb.orbis.math.simd.Vector4f.add(a, b, r);
+                }
+                var time = end - start;
+                print(simdVector4fClass, "add static", time);
             }
 
             @Test

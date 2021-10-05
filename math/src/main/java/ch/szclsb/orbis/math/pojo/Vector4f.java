@@ -7,7 +7,7 @@ public class Vector4f implements IVector4f<Vector4f> {
     public static final Vector4f ZERO = new Vector4f(0f, 0f, 0f, 0f);
     public static final Vector4f ONE = new Vector4f(1f, 1f, 1f, 1f);
 
-    public final float x, y, z, w;
+    public float x, y, z, w;
 
     public Vector4f(float x, float y, float z, float w) {
         this.x = x;
@@ -109,5 +109,12 @@ public class Vector4f implements IVector4f<Vector4f> {
     @Override
     public String toString() {
         return String.format("(%.3f, %.3f, %.3f, %.3f)", x, y, z, w);
+    }
+
+    public static void add(Vector4f a, Vector4f b, Vector4f result) {
+        result.x = a.x + b.x;
+        result.y = a.y + b.y;
+        result.z = a.z + b.z;
+        result.w = a.w + b.w;
     }
 }

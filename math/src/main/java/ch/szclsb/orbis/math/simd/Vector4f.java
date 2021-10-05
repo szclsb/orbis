@@ -10,7 +10,7 @@ import jdk.incubator.vector.VectorSpecies;
 public class Vector4f implements IVector4f<Vector4f> {
     private static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
 
-    private final FloatVector data;
+    private FloatVector data;
 
     Vector4f(FloatVector data) {
         this.data = data;
@@ -77,5 +77,9 @@ public class Vector4f implements IVector4f<Vector4f> {
             return data.sub(vector.data).abs().lt(MathUtils.TOLERANCE).allTrue();
         }
         return false;
+    }
+
+    public static void add(Vector4f a, Vector4f b, Vector4f result) {
+        result.data = a.data.add(b.data);
     }
 }
