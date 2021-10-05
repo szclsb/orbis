@@ -19,6 +19,11 @@ public class PerformanceTest {
     private static final Class<ch.szclsb.orbis.math.pojo.Vector4f> pojoVector4fClass = ch.szclsb.orbis.math.pojo.Vector4f.class;
     private static final Class<ch.szclsb.orbis.math.pojo.Matrix4f> pojoMatrix4fClass = ch.szclsb.orbis.math.pojo.Matrix4f.class;
 
+    // poja
+    private static final Class<ch.szclsb.orbis.math.poja.Vector2f> pojaVector2fClass = ch.szclsb.orbis.math.poja.Vector2f.class;
+    private static final Class<ch.szclsb.orbis.math.poja.Vector3f> pojaVector3fClass = ch.szclsb.orbis.math.poja.Vector3f.class;
+    private static final Class<ch.szclsb.orbis.math.poja.Vector4f> pojaVector4fClass = ch.szclsb.orbis.math.poja.Vector4f.class;
+
     // simd
     private static final Class<ch.szclsb.orbis.math.simd.Vector2f> simdVector2fClass = ch.szclsb.orbis.math.simd.Vector2f.class;
     private static final Class<ch.szclsb.orbis.math.simd.Vector3f> simdVector3fClass = ch.szclsb.orbis.math.simd.Vector3f.class;
@@ -65,6 +70,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testAdd(pojaVector2fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testAdd(simdVector2fClass);
@@ -90,6 +101,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testSub(pojoVector2fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testSub(pojaVector2fClass);
             }
 
             @Test
@@ -121,6 +138,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testTimes(pojaVector2fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testTimes(simdVector2fClass);
@@ -149,6 +172,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testScale(pojaVector2fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testScale(simdVector2fClass);
@@ -174,6 +203,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testDot(pojoVector2fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testDot(pojaVector2fClass);
             }
 
             @Test
@@ -224,6 +259,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testAdd(pojaVector3fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testAdd(simdVector3fClass);
@@ -252,6 +293,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testSub(pojaVector3fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testSub(simdVector3fClass);
@@ -277,6 +324,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testTimes(pojoVector3fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testTimes(pojaVector3fClass);
             }
 
             @Test
@@ -309,6 +362,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testScale(pojaVector3fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testScale(simdVector3fClass);
@@ -334,6 +393,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testDot(pojoVector3fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testDot(pojaVector3fClass);
             }
 
             @Test
@@ -384,6 +449,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testAdd(pojaVector4fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testAdd(simdVector4fClass);
@@ -409,6 +480,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testSub(pojoVector4fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testSub(pojaVector4fClass);
             }
 
             @Test
@@ -440,6 +517,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testTimes(pojaVector4fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testTimes(simdVector4fClass);
@@ -468,6 +551,12 @@ public class PerformanceTest {
             }
 
             @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testScale(pojaVector4fClass);
+            }
+
+            @Test
             @Tag("SIMD")
             public void testSimd() {
                 testScale(simdVector4fClass);
@@ -493,6 +582,12 @@ public class PerformanceTest {
             @Tag("POJO")
             public void testPojo() {
                 testDot(pojoVector4fClass);
+            }
+
+            @Test
+            @Tag("POJA")
+            public void testPoja() {
+                testDot(pojaVector4fClass);
             }
 
             @Test
