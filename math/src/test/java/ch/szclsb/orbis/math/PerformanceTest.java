@@ -1,5 +1,8 @@
 package ch.szclsb.orbis.math;
 
+import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.VectorOperators;
+import jdk.incubator.vector.VectorSpecies;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -418,6 +421,8 @@ public class PerformanceTest {
     @Nested
     @Tag("Vector4f")
     class Vector4fTest {
+        private static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_128;
+
         @BeforeAll
         public static void initVectorShape() {
             System.out.println("--------------------------------");
@@ -465,6 +470,27 @@ public class PerformanceTest {
             public void testJni() {
                 testAdd(jniVector4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var a = FloatVector.fromArray(SPECIES, new float[] {1f, 2f, 3f, 4f}, 0);
+                var b = FloatVector.fromArray(SPECIES, new float[] {-3f, -7f, -21f, -93f}, 0);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    a.add(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    a.add(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    a.add(b);
+                }
+                var time = end - start;
+                print(FloatVector.class, "add", time);
+            }
         }
 
         @Nested
@@ -498,6 +524,27 @@ public class PerformanceTest {
             @Tag("JNI")
             public void testJni() {
                 testSub(jniVector4fClass);
+            }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var a = FloatVector.fromArray(SPECIES, new float[] {1f, 2f, 3f, 4f}, 0);
+                var b = FloatVector.fromArray(SPECIES, new float[] {-3f, -7f, -21f, -93f}, 0);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    a.sub(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    a.sub(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    a.sub(b);
+                }
+                var time = end - start;
+                print(FloatVector.class, "sub", time);
             }
         }
 
@@ -533,6 +580,27 @@ public class PerformanceTest {
             public void testJni() {
                 testTimes(jniVector4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var a = FloatVector.fromArray(SPECIES, new float[] {1f, 2f, 3f, 4f}, 0);
+                var b = FloatVector.fromArray(SPECIES, new float[] {-3f, -7f, -21f, -93f}, 0);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    a.mul(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    a.mul(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    a.mul(b);
+                }
+                var time = end - start;
+                print(FloatVector.class, "times", time);
+            }
         }
 
         @Nested
@@ -567,6 +635,27 @@ public class PerformanceTest {
             public void testJni() {
                 testScale(jniVector4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var a = FloatVector.fromArray(SPECIES, new float[] {1f, 2f, 3f, 4f}, 0);
+                var s = -11f;
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    a.mul(s);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    a.mul(s);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    a.mul(s);
+                }
+                var time = end - start;
+                print(FloatVector.class, "scale", time);
+            }
         }
 
         @Nested
@@ -600,6 +689,27 @@ public class PerformanceTest {
             @Tag("JNI")
             public void testJni() {
                 testDot(jniVector4fClass);
+            }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var a = FloatVector.fromArray(SPECIES, new float[] {1f, 2f, 3f, 4f}, 0);
+                var b = FloatVector.fromArray(SPECIES, new float[] {-3f, -7f, -21f, -93f}, 0);
+
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    a.mul(b).reduceLanes(VectorOperators.ADD);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    a.mul(b).reduceLanes(VectorOperators.ADD);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    a.mul(b).reduceLanes(VectorOperators.ADD);
+                }
+                var time = end - start;
+                print(FloatVector.class, "dot", time);
             }
         }
     }
@@ -1000,7 +1110,7 @@ public class PerformanceTest {
         var innerPkgName = packageName.substring(packageName.lastIndexOf('.') + 1).toUpperCase();
         var className = vClass.getSimpleName();
 //        System.out.printf("%-4s %-8s operation %-20s x10e6 took %-8d ms%n", innerPkgName, className, name, time);
-        System.out.printf("%-4s %-8s Operation %-20s x%.1e took %8.1f ns per operation%n",
+        System.out.printf("%-10s %-16s Operation %-20s x%.1e took %8.1f ns/op%n",
                 innerPkgName, className, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 }

@@ -18,6 +18,10 @@ compileJava {
     options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
 }
 
+compileTestJava {
+    options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
+}
+
 test {
     jvmArgs('--add-modules', 'jdk.incubator.vector')
     useJUnitPlatform() {
