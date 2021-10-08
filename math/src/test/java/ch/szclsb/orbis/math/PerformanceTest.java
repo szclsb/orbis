@@ -1,19 +1,21 @@
 package ch.szclsb.orbis.math;
 
-import jdk.incubator.vector.FloatVector;
-import jdk.incubator.vector.VectorOperators;
-import jdk.incubator.vector.VectorSpecies;
+import ch.szclsb.orbis.math.simd.Matrix4f;
+import jdk.incubator.vector.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Tag("PerformanceTest")
 public class PerformanceTest {
-    public static final int LEAD_ITERATIONS = 100;
-    public static final int FOLLOW_UP_ITERATIONS = 100;
+    public static final int LEAD_ITERATIONS = 10000;
+    public static final int FOLLOW_UP_ITERATIONS = 1000;
     public static final int ITERATIONS = 10000000;
 
     // pojo
@@ -761,6 +763,19 @@ public class PerformanceTest {
     @Nested
     @Tag("Matrix4f")
     class Matrix4fTest {
+        private static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_512;
+        private static final VectorShuffle<Float> TRANSPOSE_MASK = VectorShuffle.fromValues(SPECIES,
+                0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15);
+        private static final VectorShuffle<Float> A1 = VectorShuffle.fromValues(SPECIES, 0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8, 12, 12, 12, 12);
+        private static final VectorShuffle<Float> A2 = VectorShuffle.fromValues(SPECIES, 1, 1, 1, 1, 5, 5, 5, 5, 9, 9, 9, 9, 13, 13, 13, 13);
+        private static final VectorShuffle<Float> A3 = VectorShuffle.fromValues(SPECIES, 2, 2, 2, 2, 6, 6, 6, 6, 10, 10, 10, 10, 14, 14, 14, 14);
+        private static final VectorShuffle<Float> A4 = VectorShuffle.fromValues(SPECIES, 3, 3, 3, 3, 7, 7, 7, 7, 11, 11, 11, 11, 15, 15, 15, 15);
+        private static final VectorShuffle<Float> B1 = VectorShuffle.fromValues(SPECIES, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3);
+        private static final VectorShuffle<Float> B2 = VectorShuffle.fromValues(SPECIES, 4, 5, 6, 7, 4, 5, 6, 7, 4, 5, 6, 7, 4, 5, 6, 7);
+        private static final VectorShuffle<Float> B3 = VectorShuffle.fromValues(SPECIES, 8, 9, 10, 11, 8, 9, 10, 11, 8, 9, 10, 11, 8, 9, 10, 11);
+        private static final VectorShuffle<Float> B4 = VectorShuffle.fromValues(SPECIES, 12, 13, 14, 15, 12, 13, 14, 15, 12, 13, 14, 15, 12, 13, 14, 15);
+
+
         @BeforeAll
         public static void initVectorShape() {
             System.out.println("--------------------------------");
@@ -824,6 +839,36 @@ public class PerformanceTest {
             public void testJni() {
                 testAdd(jniMatrix4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var A = FloatVector.fromArray(SPECIES, new float[]{
+                        1f, 2.3f, 33f, 14f,
+                        3f, 21f, 1330f, -150f,
+                        -8.1f, 0f, 97f, 4f,
+                        12f, -4f, 453f, 197346f}, 0
+                );
+                var B = FloatVector.fromArray(SPECIES, new float[]{
+                        -10f, -2f, -3f, 4f,
+                        1.2f, 204146f, 91f, 785f,
+                        0f, 2671f, -3.3f, -468f,
+                        1478000f, -2.5f, -4121f, 697f}, 0
+                );
+                for (var i = 0; i < LEAD_ITERATIONS; i++) {
+                    A.add(B);
+                }
+                var start = System.currentTimeMillis();
+                for (var i = 0; i < ITERATIONS; i++) {
+                    A.add(B);
+                }
+                var end = System.currentTimeMillis();
+                for (var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    A.add(B);
+                }
+                var time = end - start;
+                print(FloatVector.class, "add", time);
+            }
         }
 
         @Nested
@@ -861,6 +906,36 @@ public class PerformanceTest {
             @Tag("JNI")
             public void testJni() {
                 testSub(jniMatrix4fClass);
+            }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var A = FloatVector.fromArray(SPECIES, new float[] {
+                        1f, 2.3f, 33f, 14f,
+                        3f, 21f, 1330f, -150f,
+                        -8.1f, 0f, 97f, 4f,
+                        12f, -4f, 453f, 197346f}, 0
+                );
+                var B = FloatVector.fromArray(SPECIES, new float[] {
+                        -10f, -2f, -3f, 4f,
+                        1.2f, 204146f, 91f, 785f,
+                        0f, 2671f, -3.3f, -468f,
+                        1478000f, -2.5f, -4121f, 697f}, 0
+                );
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    A.sub(B);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    A.sub(B);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    A.sub(B);
+                }
+                var time = end - start;
+                print(FloatVector.class, "sub", time);
             }
         }
 
@@ -900,6 +975,62 @@ public class PerformanceTest {
             public void testJni() {
                 testTimes(jniMatrix4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var A = FloatVector.fromArray(SPECIES, new float[] {
+                        1f, 2.3f, 33f, 14f,
+                        3f, 21f, 1330f, -150f,
+                        -8.1f, 0f, 97f, 4f,
+                        12f, -4f, 453f, 197346f}, 0
+                );
+                var B = FloatVector.fromArray(SPECIES, new float[] {
+                        -10f, -2f, -3f, 4f,
+                        1.2f, 204146f, 91f, 785f,
+                        0f, 2671f, -3.3f, -468f,
+                        1478000f, -2.5f, -4121f, 697f}, 0
+                );
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    times(A, B);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    times(A, B);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    times(A, B);
+                }
+                var time = end - start;
+                print(FloatVector.class, "times", time);
+            }
+
+            private FloatVector times(FloatVector A, FloatVector B) {
+//                return A.rearrange(A1).mul(B.rearrange(B1))
+//                        .add(A.rearrange(A2).mul(B.rearrange(B2)))
+//                        .add(A.rearrange(A3).mul(B.rearrange(B3)))
+//                        .add(A.rearrange(A4).mul(B.rearrange(B4)));
+
+                var a = A.toArray();
+                var b = B.toArray();
+
+                var a1 = FloatVector.fromArray(SPECIES, new float[] {a[0], a[0], a[0], a[0], a[4], a[4], a[4], a[4], a[8], a[8], a[8], a[8], a[12], a[12], a[12], a[12]}, 0);
+                var a2 = FloatVector.fromArray(SPECIES, new float[] {a[0], a[0], a[0], a[0], a[4], a[4], a[4], a[4], a[8], a[8], a[8], a[8], a[12], a[12], a[12], a[12]}, 0);
+                var a3 = FloatVector.fromArray(SPECIES, new float[] {a[0], a[0], a[0], a[0], a[4], a[4], a[4], a[4], a[8], a[8], a[8], a[8], a[12], a[12], a[12], a[12]}, 0);
+                var a4 = FloatVector.fromArray(SPECIES, new float[] {a[0], a[0], a[0], a[0], a[4], a[4], a[4], a[4], a[8], a[8], a[8], a[8], a[12], a[12], a[12], a[12]}, 0);
+
+                var b1 = FloatVector.fromArray(SPECIES, new float[] {b[0], b[0], b[0], b[0], b[4], b[4], b[4], b[4], b[8], b[8], b[8], b[8], b[12], b[12], b[12], b[12]}, 0);
+                var b2 = FloatVector.fromArray(SPECIES, new float[] {b[0], b[0], b[0], b[0], b[4], b[4], b[4], b[4], b[8], b[8], b[8], b[8], b[12], b[12], b[12], b[12]}, 0);
+                var b3 = FloatVector.fromArray(SPECIES, new float[] {b[0], b[0], b[0], b[0], b[4], b[4], b[4], b[4], b[8], b[8], b[8], b[8], b[12], b[12], b[12], b[12]}, 0);
+                var b4 = FloatVector.fromArray(SPECIES, new float[] {b[0], b[0], b[0], b[0], b[4], b[4], b[4], b[4], b[8], b[8], b[8], b[8], b[12], b[12], b[12], b[12]}, 0);
+
+                return a1.mul(b1)
+                        .add(a2.mul(b2))
+                        .add(a3.mul(b3))
+                        .add(a4.mul(b4));
+
+            }
         }
 
         @Nested
@@ -938,6 +1069,36 @@ public class PerformanceTest {
             public void testJni() {
                 testTimesElem(jniMatrix4fClass);
             }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var A = FloatVector.fromArray(SPECIES, new float[] {
+                        1f, 2.3f, 33f, 14f,
+                        3f, 21f, 1330f, -150f,
+                        -8.1f, 0f, 97f, 4f,
+                        12f, -4f, 453f, 197346f}, 0
+                );
+                var B = FloatVector.fromArray(SPECIES, new float[] {
+                        -10f, -2f, -3f, 4f,
+                        1.2f, 204146f, 91f, 785f,
+                        0f, 2671f, -3.3f, -468f,
+                        1478000f, -2.5f, -4121f, 697f}, 0
+                );
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    A.mul(B);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    A.mul(B);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    A.mul(B);
+                }
+                var time = end - start;
+                print(FloatVector.class, "times elementwise", time);
+            }
         }
 
         @Nested
@@ -970,6 +1131,31 @@ public class PerformanceTest {
             @Tag("JNI")
             public void testJni() {
                 testScale(jniMatrix4fClass);
+            }
+
+            @Test
+            @Tag("VAPI")
+            public void testVapi() {
+                var A = FloatVector.fromArray(SPECIES, new float[] {
+                        1f, 2.3f, 33f, 14f,
+                        3f, 21f, 1330f, -150f,
+                        -8.1f, 0f, 97f, 4f,
+                        12f, -4f, 453f, 197346f}, 0
+                );
+                var s = 97f;
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    A.mul(s);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    A.mul(s);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    A.mul(s);
+                }
+                var time = end - start;
+                print(FloatVector.class, "scale", time);
             }
         }
     }
