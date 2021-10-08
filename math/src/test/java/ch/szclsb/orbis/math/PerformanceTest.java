@@ -834,16 +834,16 @@ public class PerformanceTest {
             @Tag("VAPI")
             public void testVapi() {
                 var a = new float[]{ 1f, 2.3f, 33f, 14f, 3f, 21f, 1330f, -150f, -8.1f, 0f, 97f, 4f, 12f, -4f, 453f, 197346f };
-                var A1 = FloatVector.fromArray(SPECIES, a, 0);
-                var A2 = FloatVector.fromArray(SPECIES, a, 4);
-                var A3 = FloatVector.fromArray(SPECIES, a, 8);
-                var A4 = FloatVector.fromArray(SPECIES, a, 12);
                 var b = new float[]{ -10f, -2f, -3f, 4f, 1.2f, 204146f, 91f, 785f, 0f, 2671f, -3.3f, -468f, 1478000f, -2.5f, -4121f, 697f };
-                var B1 = FloatVector.fromArray(SPECIES, b, 0);
-                var B2 = FloatVector.fromArray(SPECIES, b, 4);
-                var B3 = FloatVector.fromArray(SPECIES, b, 8);
-                var B4 = FloatVector.fromArray(SPECIES, b, 12);
                 for (var i = 0; i < LEAD_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.add(B1);
                     A2.add(B2);
                     A3.add(B3);
@@ -851,6 +851,14 @@ public class PerformanceTest {
                 }
                 var start = System.currentTimeMillis();
                 for (var i = 0; i < ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.add(B1);
                     A2.add(B2);
                     A3.add(B3);
@@ -858,6 +866,14 @@ public class PerformanceTest {
                 }
                 var end = System.currentTimeMillis();
                 for (var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.add(B1);
                     A2.add(B2);
                     A3.add(B3);
@@ -909,16 +925,16 @@ public class PerformanceTest {
             @Tag("VAPI")
             public void testVapi() {
                 var a = new float[]{ 1f, 2.3f, 33f, 14f, 3f, 21f, 1330f, -150f, -8.1f, 0f, 97f, 4f, 12f, -4f, 453f, 197346f };
-                var A1 = FloatVector.fromArray(SPECIES, a, 0);
-                var A2 = FloatVector.fromArray(SPECIES, a, 4);
-                var A3 = FloatVector.fromArray(SPECIES, a, 8);
-                var A4 = FloatVector.fromArray(SPECIES, a, 12);
                 var b = new float[]{ -10f, -2f, -3f, 4f, 1.2f, 204146f, 91f, 785f, 0f, 2671f, -3.3f, -468f, 1478000f, -2.5f, -4121f, 697f };
-                var B1 = FloatVector.fromArray(SPECIES, b, 0);
-                var B2 = FloatVector.fromArray(SPECIES, b, 4);
-                var B3 = FloatVector.fromArray(SPECIES, b, 8);
-                var B4 = FloatVector.fromArray(SPECIES, b, 12);
                 for (var i = 0; i < LEAD_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.sub(B1);
                     A2.sub(B2);
                     A3.sub(B3);
@@ -926,6 +942,14 @@ public class PerformanceTest {
                 }
                 var start = System.currentTimeMillis();
                 for (var i = 0; i < ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.sub(B1);
                     A2.sub(B2);
                     A3.sub(B3);
@@ -933,6 +957,14 @@ public class PerformanceTest {
                 }
                 var end = System.currentTimeMillis();
                 for (var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.sub(B1);
                     A2.sub(B2);
                     A3.sub(B3);
@@ -984,71 +1016,75 @@ public class PerformanceTest {
             @Tag("VAPI")
             public void testVapi() {
                 var a = new float[]{ 1f, 2.3f, 33f, 14f, 3f, 21f, 1330f, -150f, -8.1f, 0f, 97f, 4f, 12f, -4f, 453f, 197346f };
-                var A1 = FloatVector.fromArray(SPECIES, a, 0);
-                var A2 = FloatVector.fromArray(SPECIES, a, 4);
-                var A3 = FloatVector.fromArray(SPECIES, a, 8);
-                var A4 = FloatVector.fromArray(SPECIES, a, 12);
                 var b = new float[]{ -10f, -2f, -3f, 4f, 1.2f, 204146f, 91f, 785f, 0f, 2671f, -3.3f, -468f, 1478000f, -2.5f, -4121f, 697f };
-                var B1 = FloatVector.fromArray(SPECIES, b, 0);
-                var B2 = FloatVector.fromArray(SPECIES, b, 4);
-                var B3 = FloatVector.fromArray(SPECIES, b, 8);
-                var B4 = FloatVector.fromArray(SPECIES, b, 12);
 
                 for(var i = 0; i < LEAD_ITERATIONS; i++) {
-                    var C1 = B1.mul(A1.lane(0))
-                            .add(B2.mul(A1.lane(1)))
-                            .add(B3.mul(A1.lane(2)))
-                            .add(B4.mul(A1.lane(3)));
-                    var C2 = B1.mul(A2.lane(0))
-                            .add(B2.mul(A2.lane(1)))
-                            .add(B3.mul(A2.lane(2)))
-                            .add(B4.mul(A2.lane(3)));
-                    var C3 = B1.mul(A3.lane(0))
-                            .add(B2.mul(A3.lane(1)))
-                            .add(B3.mul(A3.lane(2)))
-                            .add(B4.mul(A3.lane(3)));
-                    var C4 = B1.mul(A4.lane(0))
-                            .add(B2.mul(A4.lane(1)))
-                            .add(B3.mul(A4.lane(2)))
-                            .add(B4.mul(A4.lane(3)));
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
+                    var C1 = B1.mul(FloatVector.broadcast(SPECIES, a[0]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[1])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[2])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[3])));
+                    var C2 = B1.mul(FloatVector.broadcast(SPECIES, a[4]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[5])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[6])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[7])));
+                    var C3 = B1.mul(FloatVector.broadcast(SPECIES, a[8]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[9])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[10])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[11])));
+                    var C4 = B1.mul(FloatVector.broadcast(SPECIES, a[12]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[13])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[14])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[15])));
                 }
                 var start = System.currentTimeMillis();
                 for(var i = 0; i < ITERATIONS; i++) {
-                    var C1 = B1.mul(A1.lane(0))
-                            .add(B2.mul(A1.lane(1)))
-                            .add(B3.mul(A1.lane(2)))
-                            .add(B4.mul(A1.lane(3)));
-                    var C2 = B1.mul(A2.lane(0))
-                            .add(B2.mul(A2.lane(1)))
-                            .add(B3.mul(A2.lane(2)))
-                            .add(B4.mul(A2.lane(3)));
-                    var C3 = B1.mul(A3.lane(0))
-                            .add(B2.mul(A3.lane(1)))
-                            .add(B3.mul(A3.lane(2)))
-                            .add(B4.mul(A3.lane(3)));
-                    var C4 = B1.mul(A4.lane(0))
-                            .add(B2.mul(A4.lane(1)))
-                            .add(B3.mul(A4.lane(2)))
-                            .add(B4.mul(A4.lane(3)));
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
+                    var C1 = B1.mul(FloatVector.broadcast(SPECIES, a[0]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[1])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[2])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[3])));
+                    var C2 = B1.mul(FloatVector.broadcast(SPECIES, a[4]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[5])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[6])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[7])));
+                    var C3 = B1.mul(FloatVector.broadcast(SPECIES, a[8]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[9])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[10])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[11])));
+                    var C4 = B1.mul(FloatVector.broadcast(SPECIES, a[12]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[13])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[14])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[15])));
                 }
                 var end = System.currentTimeMillis();
                 for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
-                    var C1 = B1.mul(A1.lane(0))
-                            .add(B2.mul(A1.lane(1)))
-                            .add(B3.mul(A1.lane(2)))
-                            .add(B4.mul(A1.lane(3)));
-                    var C2 = B1.mul(A2.lane(0))
-                            .add(B2.mul(A2.lane(1)))
-                            .add(B3.mul(A2.lane(2)))
-                            .add(B4.mul(A2.lane(3)));
-                    var C3 = B1.mul(A3.lane(0))
-                            .add(B2.mul(A3.lane(1)))
-                            .add(B3.mul(A3.lane(2)))
-                            .add(B4.mul(A3.lane(3)));
-                    var C4 = B1.mul(A4.lane(0))
-                            .add(B2.mul(A4.lane(1)))
-                            .add(B3.mul(A4.lane(2)))
-                            .add(B4.mul(A4.lane(3)));
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
+                    var C1 = B1.mul(FloatVector.broadcast(SPECIES, a[0]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[1])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[2])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[3])));
+                    var C2 = B1.mul(FloatVector.broadcast(SPECIES, a[4]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[5])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[6])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[7])));
+                    var C3 = B1.mul(FloatVector.broadcast(SPECIES, a[8]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[9])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[10])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[11])));
+                    var C4 = B1.mul(FloatVector.broadcast(SPECIES, a[12]))
+                            .add(B2.mul(FloatVector.broadcast(SPECIES, a[13])))
+                            .add(B3.mul(FloatVector.broadcast(SPECIES, a[14])))
+                            .add(B4.mul(FloatVector.broadcast(SPECIES, a[15])));
                 }
                 var time = end - start;
                 print(FloatVector.class, "times", time);
@@ -1096,16 +1132,16 @@ public class PerformanceTest {
             @Tag("VAPI")
             public void testVapi() {
                 var a = new float[]{ 1f, 2.3f, 33f, 14f, 3f, 21f, 1330f, -150f, -8.1f, 0f, 97f, 4f, 12f, -4f, 453f, 197346f };
-                var A1 = FloatVector.fromArray(SPECIES, a, 0);
-                var A2 = FloatVector.fromArray(SPECIES, a, 4);
-                var A3 = FloatVector.fromArray(SPECIES, a, 8);
-                var A4 = FloatVector.fromArray(SPECIES, a, 12);
                 var b = new float[]{ -10f, -2f, -3f, 4f, 1.2f, 204146f, 91f, 785f, 0f, 2671f, -3.3f, -468f, 1478000f, -2.5f, -4121f, 697f };
-                var B1 = FloatVector.fromArray(SPECIES, b, 0);
-                var B2 = FloatVector.fromArray(SPECIES, b, 4);
-                var B3 = FloatVector.fromArray(SPECIES, b, 8);
-                var B4 = FloatVector.fromArray(SPECIES, b, 12);
                 for (var i = 0; i < LEAD_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.mul(B1);
                     A2.mul(B2);
                     A3.mul(B3);
@@ -1113,6 +1149,14 @@ public class PerformanceTest {
                 }
                 var start = System.currentTimeMillis();
                 for (var i = 0; i < ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.mul(B1);
                     A2.mul(B2);
                     A3.mul(B3);
@@ -1120,6 +1164,14 @@ public class PerformanceTest {
                 }
                 var end = System.currentTimeMillis();
                 for (var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var B1 = FloatVector.fromArray(SPECIES, b, 0);
+                    var B2 = FloatVector.fromArray(SPECIES, b, 4);
+                    var B3 = FloatVector.fromArray(SPECIES, b, 8);
+                    var B4 = FloatVector.fromArray(SPECIES, b, 12);
                     A1.mul(B1);
                     A2.mul(B2);
                     A3.mul(B3);
@@ -1166,30 +1218,41 @@ public class PerformanceTest {
             @Tag("VAPI")
             public void testVapi() {
                 var a = new float[]{ 1f, 2.3f, 33f, 14f, 3f, 21f, 1330f, -150f, -8.1f, 0f, 97f, 4f, 12f, -4f, 453f, 197346f };
-                var A1 = FloatVector.fromArray(SPECIES, a, 0);
-                var A2 = FloatVector.fromArray(SPECIES, a, 4);
-                var A3 = FloatVector.fromArray(SPECIES, a, 8);
-                var A4 = FloatVector.fromArray(SPECIES, a, 12);
                 var s = 97f;
                 for (var i = 0; i < LEAD_ITERATIONS; i++) {
-                    A1.mul(s);
-                    A2.mul(s);
-                    A3.mul(s);
-                    A4.mul(s);
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var S = FloatVector.broadcast(SPECIES, s);
+                    A1.mul(S);
+                    A2.mul(S);
+                    A3.mul(S);
+                    A4.mul(S);
                 }
                 var start = System.currentTimeMillis();
                 for (var i = 0; i < ITERATIONS; i++) {
-                    A1.mul(s);
-                    A2.mul(s);
-                    A3.mul(s);
-                    A4.mul(s);
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var S = FloatVector.broadcast(SPECIES, s);
+                    A1.mul(S);
+                    A2.mul(S);
+                    A3.mul(S);
+                    A4.mul(S);
                 }
                 var end = System.currentTimeMillis();
                 for (var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
-                    A1.mul(s);
-                    A2.mul(s);
-                    A3.mul(s);
-                    A4.mul(s);
+                    var A1 = FloatVector.fromArray(SPECIES, a, 0);
+                    var A2 = FloatVector.fromArray(SPECIES, a, 4);
+                    var A3 = FloatVector.fromArray(SPECIES, a, 8);
+                    var A4 = FloatVector.fromArray(SPECIES, a, 12);
+                    var S = FloatVector.broadcast(SPECIES, s);
+                    A1.mul(S);
+                    A2.mul(S);
+                    A3.mul(S);
+                    A4.mul(S);
                 }
                 var time = end - start;
                 print(FloatVector.class, "scale", time);
