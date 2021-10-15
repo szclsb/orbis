@@ -9,20 +9,14 @@ public class SimdVectorApi implements VectorAPI {
     private final int lanes, th, size;
 
     public SimdVectorApi(int size) {
-        this(FloatVector.SPECIES_PREFERRED, size);
+        this(size, FloatVector.SPECIES_PREFERRED);
     }
 
-    public SimdVectorApi(VectorSpecies<Float> species, int size) {
+    public SimdVectorApi(int size, VectorSpecies<Float> species) {
         this.species = species;
         this.lanes = species.length();
         this.th = (size / lanes) * lanes;
         this.size = size;
-    }
-
-    public void add(Vector4f a, Vector4f b, Vector4f r) {
-        var va = FloatVector.fromArray(species, a.data, 0);
-        var vb = FloatVector.fromArray(species, b.data, 0);
-        va.add(vb).intoArray(r.data, 0);
     }
 
     @Override

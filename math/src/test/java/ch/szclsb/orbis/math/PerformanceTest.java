@@ -86,16 +86,18 @@ public class PerformanceTest {
         @Tag("Vector4f")
         public class Vector4fTest {
             private final int SIZE = 4;
-            private final VectorAPI api = new SimdVectorApi(FloatVector.SPECIES_128, SIZE);
+            private final SimdVectorApi api = new SimdVectorApi(SIZE, FloatVector.SPECIES_128);
             private final float[] a = new float[]{1f, 2f, 3f, 4f};
             private final float[] b = new float[]{-3f, -7f, -21f, -93f};
             private final float s = 97f;
 
-            @Test
-            public void testAdd() {
-                var time = testApiAdd(api, a, b, new float[SIZE]);
-                print(api, SIZE, "add", time);
-            }
+//            @Test
+//            public void testAdd() {
+//                var a = new Vector4f(1f, 2f, 3f, 4f);
+//                var b = new Vector4f(-3f, -7f, -21f, -93f);
+//                var time = testApiAdd(api, a, b, new Vector4f(0f, 0f, 0f, 0f));
+//                print(api, SIZE, "add", time);
+//            }
 
             @Test
             public void testAddScalar() {
@@ -150,6 +152,22 @@ public class PerformanceTest {
 
         return end - start;
     }
+
+//    private static long testApiAdd(SimdVectorApi api, Vector4f a, Vector4f b, Vector4f r) {
+//        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+//            api.add(a, b, r);
+//        }
+//        var start = System.currentTimeMillis();
+//        for(var i = 0; i < ITERATIONS; i++) {
+//            api.add(a, b, r);
+//        }
+//        var end = System.currentTimeMillis();
+//        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+//            api.add(a, b, r);
+//        }
+//
+//        return end - start;
+//    }
 
     private static long testApiAdd(VectorAPI api, float[] a, float s, float[] r) {
         for(var i = 0; i < LEAD_ITERATIONS; i++) {
