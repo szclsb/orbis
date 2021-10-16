@@ -30,17 +30,63 @@ public class SimdProcessor extends AbstractProcessor {
     }
 
     private void createAPI(String classname) throws IOException {
-        var classnameApi = classname + "API";
-        var pos = classnameApi.lastIndexOf('.');
-        var file = processingEnv.getFiler().createSourceFile(classnameApi);
+        var pos = classname.lastIndexOf('.');
+        var simpleVectorName = classname.substring(pos + 1);
+        var simpleApiName = simpleVectorName + "API";
+        var packageName = classname.substring(0, pos);
+        var file = processingEnv.getFiler().createSourceFile(packageName + "." + simpleApiName);
         try (var writer = file.openWriter()) {
             writer.write(String.format("""
-                    package %s;
-
-                    public class %s {
+                    package %1$s;
                     
+                    import %1$s.%4$s;
+
+                    public class %2$s implements %4$s<%3$s> {
+                        @Override
+                        public boolean equals(%3$s a, %3$s b) {
+                            return false;
+                        }
+                    
+                        @Override
+                        public void add(%3$s a, %3$s b, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public void add(%3$s a, float s, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public void sub(%3$s a, %3$s b, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public void sub(%3$s a, float s, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public void mul(%3$s a, %3$s b, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public void mul(%3$s a, float s, %3$s r) {
+                            
+                        }
+                        
+                        @Override
+                        public float dot(%3$s a, %3$s b) {
+                            return 0f;
+                        }
                     }
-                    """, classnameApi.substring(0, pos), classnameApi.substring(pos + 1)));
+                    """, packageName,
+                    simpleApiName,
+                    simpleVectorName,
+                    "IVectorApi"
+            ));
         }
     }
 }
