@@ -2,6 +2,11 @@
 .idea/
 *.iml
 
+# VS Code
+.vscode/
+.project
+.classpath
+
 # Gradle
 .gradle
 **/build/

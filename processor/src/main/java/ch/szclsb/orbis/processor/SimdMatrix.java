@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
-public @interface Simd {
-    int lanes();
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SimdMatrix {
+    int rows();
+    int columns();
 }

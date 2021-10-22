@@ -1,81 +1,75 @@
 package ch.szclsb.orbis.math;
 
-public class PojoVectorApi implements VectorAPI {
+import ch.szclsb.orbis.processor.SimdVec;
+
+public class PojoVectorApi<T extends FVector> implements IFVectorApi<T> {
     private final int size;
 
-    public PojoVectorApi(int size) {
-        this.size = size;
+    public PojoVectorApi(Class<T> tClass) {
+        this.size = tClass.getAnnotation(SimdVec.class).lanes();
     }
 
     @Override
-    public void add(float[] a, float[] b, float[] r) {
+    public void add(final T a, T b, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] + b[i];
+            r.data[i] = a.data[i] + b.data[i];
         }
     }
 
     @Override
-    public void add(float[] a, float s, float[] r) {
+    public void add(T a, float s, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] + s;
+            r.data[i] = a.data[i] + s;
         }
     }
 
     @Override
-    public void sub(float[] a, float[] b, float[] r) {
+    public void sub(T a, T b, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] - b[i];
+            r.data[i] = a.data[i] - b.data[i];
         }
     }
 
     @Override
-    public void sub(float[] a, float s, float[] r) {
+    public void sub(T a, float s, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] - s;
+            r.data[i] = a.data[i] - s;
         }
     }
 
     @Override
-    public void mul(float[] a, float[] b, float[] r) {
+    public void mul(T a, T b, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] * b[i];
+            r.data[i] = a.data[i] * b.data[i];
         }
     }
 
     @Override
-    public void mul(float[] a, float s, float[] r) {
+    public void mul(T a, float s, T r) {
         for (var i = 0; i < size; i++) {
-            r[i] = a[i] * s;
+            r.data[i] = a.data[i] * s;
         }
     }
 
     @Override
-    public void mmul(float[] a, float[] b, float[] r) {
-        for (var i = 0; i < size; i++) {
-            for (var j = 0; j < size; j++) {
-                var sum = 0;
-                for (var k = 0; k < size; k++) {
-                    sum += a[i * size + k] * b[k * size + j];
-                }
-                r[i * size + j] = sum;
-            }
-        }
-    }
-
-    @Override
-    public float dot(float[] a, float[] b) {
+    public float dot(T a, T b) {
         var result = 0;
         for (var i = 0; i < size; i++) {
-            result += a[i] * b[i];
+            result += a.data[i] * b.data[i];
         }
         return result;
     }
 
     @Override
-    public boolean equals(float[] a, float[] b) {
+    public void cross(T a, T b, T r) {
+
+    }
+
+    @Override
+    public boolean equals(T a, T b) {
         var result = true;
         for (var i = 0; result && i < size; i++) {
-            result = MathUtils.isFloatEquals(a[i], b[i]);
+            result = MathUtils.isFloatEquals(a.data[i], b.data[i]);
         }
         return result;
     }

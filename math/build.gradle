@@ -22,6 +22,12 @@ compileJava {
     options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 compileTestJava {
     options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
 }
