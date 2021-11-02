@@ -1,5 +1,6 @@
 package ch.szclsb.orbis.math;
 
+import ch.szclsb.orbis.processor.SimdMatrix;
 import ch.szclsb.orbis.processor.SimdVec;
 import jdk.incubator.vector.FloatVector;
 import org.junit.jupiter.api.AfterAll;
@@ -35,37 +36,37 @@ public class PerformanceTest {
 
             @Test
             public void testAdd() {
-                var time = testApiAdd(api, a, b, create(tClass));
+                var time = testApiAdd(api, a, b, createVector(tClass));
                 print(api, tClass, "add", time);
             }
 
             @Test
             public void testAddScalar() {
-                var time = testApiAdd(api, a, s, create(tClass));
+                var time = testApiAdd(api, a, s, createVector(tClass));
                 print(api, tClass, "add scalar", time);
             }
 
             @Test
             public void testSub() {
-                var time = testApiSub(api, a, b, create(tClass));
+                var time = testApiSub(api, a, b, createVector(tClass));
                 print(api, tClass, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
-                var time = testApiSub(api, a, s, create(tClass));
+                var time = testApiSub(api, a, s, createVector(tClass));
                 print(api, tClass, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
-                var time = testApiMul(api, a, b, create(tClass));
+                var time = testApiMul(api, a, b, createVector(tClass));
                 print(api, tClass, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
-                var time = testApiMul(api, a, s, create(tClass));
+                var time = testApiMul(api, a, s, createVector(tClass));
                 print(api, tClass, "mul scalar", time);
             }
 
@@ -73,6 +74,68 @@ public class PerformanceTest {
             public void testDot() {
                 var time = testApiDot(api, a, b);
                 print(api, tClass, "dot", time);
+            }
+        }
+
+        @Nested
+        @Tag("Matrix4f")
+        public class Matrix4fTest {
+            private final Class<FMatrix4x4> tClass = FMatrix4x4.class;
+            private final IFMatrixApi<FMatrix4x4> api = new PojoMatrixApi<>(tClass);
+            private final FMatrix4x4 a = new FMatrix4x4(
+                    4f, 8f, 3f, 1f,
+                    15f, 6f, 7f, 12f,
+                    9f, 2f, 11f, 9f,
+                    5f, 3f, 7f, 2f
+            );
+            private final FMatrix4x4 b = new FMatrix4x4(
+                    7f, 10f, 3f, 14f,
+                    11f, 6f, 7f, 13f,
+                    1, 4f, 15f, 5f,
+                    12f, 8f, 2f, 9f
+            );
+            private final float s = 97f;
+
+            @Test
+            public void testAdd() {
+                var time = testApiAdd(api, a, b, createMatrix(tClass));
+                print(api, tClass, "add", time);
+            }
+
+            @Test
+            public void testAddScalar() {
+                var time = testApiAdd(api, a, s, createMatrix(tClass));
+                print(api, tClass, "add scalar", time);
+            }
+
+            @Test
+            public void testSub() {
+                var time = testApiSub(api, a, b, createMatrix(tClass));
+                print(api, tClass, "sub", time);
+            }
+
+            @Test
+            public void testSubScalar() {
+                var time = testApiSub(api, a, s, createMatrix(tClass));
+                print(api, tClass, "sub scalar", time);
+            }
+
+            @Test
+            public void testMul() {
+                var time = testApiMul(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul elem", time);
+            }
+
+            @Test
+            public void testMulScalar() {
+                var time = testApiMul(api, a, s, createMatrix(tClass));
+                print(api, tClass, "mul scalar", time);
+            }
+
+            @Test
+            public void testMulMat() {
+                var time = testApiMulMat(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul", time);
             }
         }
     }
@@ -96,37 +159,37 @@ public class PerformanceTest {
 
             @Test
             public void testAdd() {
-                var time = testApiAdd(api, a, b, create(tClass));
+                var time = testApiAdd(api, a, b, createVector(tClass));
                 print(api, tClass, "add", time);
             }
 
             @Test
             public void testAddScalar() {
-                var time = testApiAdd(api, a, s, create(tClass));
+                var time = testApiAdd(api, a, s, createVector(tClass));
                 print(api, tClass, "add scalar", time);
             }
 
             @Test
             public void testSub() {
-                var time = testApiSub(api, a, b, create(tClass));
+                var time = testApiSub(api, a, b, createVector(tClass));
                 print(api, tClass, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
-                var time = testApiSub(api, a, s, create(tClass));
+                var time = testApiSub(api, a, s, createVector(tClass));
                 print(api, tClass, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
-                var time = testApiMul(api, a, b, create(tClass));
+                var time = testApiMul(api, a, b, createVector(tClass));
                 print(api, tClass, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
-                var time = testApiMul(api, a, s, create(tClass));
+                var time = testApiMul(api, a, s, createVector(tClass));
                 print(api, tClass, "mul scalar", time);
             }
 
@@ -157,37 +220,37 @@ public class PerformanceTest {
 
             @Test
             public void testAdd() {
-                var time = testApiAdd(api, a, b, create(tClass));
+                var time = testApiAdd(api, a, b, createVector(tClass));
                 print(api, tClass, "add", time);
             }
 
             @Test
             public void testAddScalar() {
-                var time = testApiAdd(api, a, s, create(tClass));
+                var time = testApiAdd(api, a, s, createVector(tClass));
                 print(api, tClass, "add scalar", time);
             }
 
             @Test
             public void testSub() {
-                var time = testApiSub(api, a, b, create(tClass));
+                var time = testApiSub(api, a, b, createVector(tClass));
                 print(api, tClass, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
-                var time = testApiSub(api, a, s, create(tClass));
+                var time = testApiSub(api, a, s, createVector(tClass));
                 print(api, tClass, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
-                var time = testApiMul(api, a, b, create(tClass));
+                var time = testApiMul(api, a, b, createVector(tClass));
                 print(api, tClass, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
-                var time = testApiMul(api, a, s, create(tClass));
+                var time = testApiMul(api, a, s, createVector(tClass));
                 print(api, tClass, "mul scalar", time);
             }
 
@@ -197,9 +260,87 @@ public class PerformanceTest {
                 print(api, tClass, "dot", time);
             }
         }
+
+        @Nested
+        @Tag("Matrix4f")
+        public class Matrix4fTest {
+            private final Class<FMatrix4x4> tClass = FMatrix4x4.class;
+            private final IFMatrixApi<FMatrix4x4> api = new FMatrix4x4API();
+            private final FMatrix4x4 a = new FMatrix4x4(
+                    4f, 8f, 3f, 1f,
+                    15f, 6f, 7f, 12f,
+                    9f, 2f, 11f, 9f,
+                    5f, 3f, 7f, 2f
+            );
+            private final FMatrix4x4 b = new FMatrix4x4(
+                    7f, 10f, 3f, 14f,
+                    11f, 6f, 7f, 13f,
+                    1, 4f, 15f, 5f,
+                    12f, 8f, 2f, 9f
+            );
+            private final float s = 97f;
+
+            @Test
+            public void testAdd() {
+                var time = testApiAdd(api, a, b, createMatrix(tClass));
+                print(api, tClass, "add", time);
+            }
+
+            @Test
+            public void testAddScalar() {
+                var time = testApiAdd(api, a, s, createMatrix(tClass));
+                print(api, tClass, "add scalar", time);
+            }
+
+            @Test
+            public void testSub() {
+                var time = testApiSub(api, a, b, createMatrix(tClass));
+                print(api, tClass, "sub", time);
+            }
+
+            @Test
+            public void testSubScalar() {
+                var time = testApiSub(api, a, s, createMatrix(tClass));
+                print(api, tClass, "sub scalar", time);
+            }
+
+            @Test
+            public void testMul() {
+                var time = testApiMul(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul elem", time);
+            }
+
+            @Test
+            public void testMulScalar() {
+                var time = testApiMul(api, a, s, createMatrix(tClass));
+                print(api, tClass, "mul scalar", time);
+            }
+
+            @Test
+            public void testMulMat() {
+                var time = testApiMulMat(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul", time);
+            }
+        }
     }
 
     private static <T extends FVector> long testApiAdd(IFVectorApi<T> api, T a, T b, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.add(a, b, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.add(a, b, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.add(a, b, r);
+        }
+
+        return end - start;
+    }
+
+    private static <T extends FMatrix> long testApiAdd(IFMatrixApi<T> api, T a, T b, T r) {
         for(var i = 0; i < LEAD_ITERATIONS; i++) {
             api.add(a, b, r);
         }
@@ -231,7 +372,39 @@ public class PerformanceTest {
         return end - start;
     }
 
+    private static <T extends FMatrix> long testApiAdd(IFMatrixApi<T> api, T a, float s, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.add(a, s, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.add(a, s, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.add(a, s, r);
+        }
+
+        return end - start;
+    }
+
     private static <T extends FVector> long testApiSub(IFVectorApi<T> api, T a, T b, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.sub(a, b, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.sub(a, b, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.sub(a, b, r);
+        }
+
+        return end - start;
+    }
+
+    private static <T extends FMatrix> long testApiSub(IFMatrixApi<T> api, T a, T b, T r) {
         for(var i = 0; i < LEAD_ITERATIONS; i++) {
             api.sub(a, b, r);
         }
@@ -263,6 +436,22 @@ public class PerformanceTest {
         return end - start;
     }
 
+    private static <T extends FMatrix> long testApiSub(IFMatrixApi<T> api, T a, float s, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.sub(a, s, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.sub(a, s, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.sub(a, s, r);
+        }
+
+        return end - start;
+    }
+
     private static <T extends FVector> long testApiMul(IFVectorApi<T> api, T a, T b, T r) {
         for(var i = 0; i < LEAD_ITERATIONS; i++) {
             api.mul(a, b, r);
@@ -274,6 +463,22 @@ public class PerformanceTest {
         var end = System.currentTimeMillis();
         for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
             api.mul(a, b, r);
+        }
+
+        return end - start;
+    }
+
+    private static <T extends FMatrix> long testApiMul(IFMatrixApi<T> api, T a, T b, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api._mul(a, b, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api._mul(a, b, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api._mul(a, b, r);
         }
 
         return end - start;
@@ -295,6 +500,38 @@ public class PerformanceTest {
         return end - start;
     }
 
+    private static <T extends FMatrix> long testApiMul(IFMatrixApi<T> api, T a, float s, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.mul(a, s, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.mul(a, s, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.mul(a, s, r);
+        }
+
+        return end - start;
+    }
+
+    private static <T extends FMatrix> long testApiMulMat(IFMatrixApi<T> api, T a, T b, T r) {
+        for(var i = 0; i < LEAD_ITERATIONS; i++) {
+            api.mul(a, b, r);
+        }
+        var start = System.currentTimeMillis();
+        for(var i = 0; i < ITERATIONS; i++) {
+            api.mul(a, b, r);
+        }
+        var end = System.currentTimeMillis();
+        for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+            api.mul(a, b, r);
+        }
+
+        return end - start;
+    }
+
     private static <T extends FVector> long testApiDot(IFVectorApi<T> api, T a, T b) {
         for(var i = 0; i < LEAD_ITERATIONS; i++) {
             api.dot(a, b);
@@ -311,7 +548,16 @@ public class PerformanceTest {
         return end - start;
     }
 
-    private static <T extends FVector> T create(Class<T> tClass) {
+    private static <T extends FVector> T createVector(Class<T> tClass) {
+        try {
+            return tClass.getConstructor().newInstance();
+        } catch (Exception e) {
+            fail(e);
+        }
+        return null;
+    }
+
+    private static <T extends FMatrix> T createMatrix(Class<T> tClass) {
         try {
             return tClass.getConstructor().newInstance();
         } catch (Exception e) {
@@ -331,8 +577,14 @@ public class PerformanceTest {
     private static <T extends FVector> void print(IFVectorApi<T> api, Class<T> tClass, String name, long time) {
         var size = tClass.getAnnotation(SimdVec.class).lanes();
         var className = api.getClass().getSimpleName();
-//        System.out.printf("%-4s %-8s operation %-20s x10e6 took %-8d ms%n", innerPkgName, className, name, time);
         System.out.printf("%-22s lanes %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
                 className, size, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
+    }
+
+    private static <T extends FMatrix> void print(IFMatrixApi<T> api, Class<T> tClass, String name, long time) {
+        var annotation = tClass.getAnnotation(SimdMatrix.class);
+        var className = api.getClass().getSimpleName();
+        System.out.printf("%-22s rows %2d columns %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
+                className, annotation.rows(), annotation.columns(), name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 }
