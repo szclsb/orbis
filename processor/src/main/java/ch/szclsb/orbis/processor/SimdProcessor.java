@@ -2,78 +2,95 @@ package ch.szclsb.orbis.processor;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SupportedAnnotationTypes({
-        "ch.szclsb.orbis.processor.SimdVec",
-        "ch.szclsb.orbis.processor.SimdMatrix"
+        SimdProcessor.vectorAnnotationName,
+        SimdProcessor.matrixAnnotationName
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class SimdProcessor extends AbstractProcessor {
+    public static final String vectorAnnotationName = "ch.szclsb.orbis.processor.SimdVec";
+    public static final String matrixAnnotationName = "ch.szclsb.orbis.processor.SimdMatrix";
+
+    // used internal vector definition
+    private static final String SPECIES_ELEMENT = "FloatVector.SPECIES_128";
+    private static final int SPECIES_LANES = 4;
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-//        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "STARTED PROCESSOR");
-
         for (TypeElement annotation : annotations) {
-            roundEnv.getElementsAnnotatedWith(annotation).forEach(element -> {
-                var vecAnnotation = element.getAnnotation(SimdVec.class);
-                if (vecAnnotation != null) {
-                    processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Creating Simd optimized API for class: " + element);
-                    try {
-                        createAPI(element.toString(), vecAnnotation.lanes());
-                    } catch (Exception e) {
-                        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
-                    }
+            if (annotation.getQualifiedName().contentEquals(vectorAnnotationName)) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Creating Simd optimized vector API");
+                try {
+                    createVectorApi(roundEnv.getElementsAnnotatedWith(annotation),
+                            "ch.szclsb.orbis.math", "SimdVectorApi", "IFVectorApi");
+                } catch (Exception e) {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
                 }
-                var matAnnotation = element.getAnnotation(SimdMatrix.class);
-                if (matAnnotation != null) {
-
+            } else if (annotation.getQualifiedName().contentEquals(matrixAnnotationName)) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Creating Simd optimized matrix API");
+                try {
+                    createMatrixApi(roundEnv.getElementsAnnotatedWith(annotation),
+                            "ch.szclsb.orbis.math", "SimdMatrixApi", "IFMatrixApi");
+                } catch (Exception e) {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
                 }
-            });
+            }
         }
+
         return false;
     }
 
-    private void createAPI(String classname, int lanes) throws IOException {
-        var pos = classname.lastIndexOf('.');
-        var simpleVectorName = classname.substring(pos + 1);
-        var simpleApiName = simpleVectorName + "API";
-        var packageName = classname.substring(0, pos);
-        var th = (lanes / 4) * 4;
-        var file = processingEnv.getFiler().createSourceFile(packageName + "." + simpleApiName);
+    private void createVectorApi(Set<? extends Element> classes, String packageName, String apiName, String interfaceName) throws IOException {
+        var file = processingEnv.getFiler().createSourceFile(packageName + "." + apiName);
         try (var writer = file.openWriter()) {
             writer.write(String.format("""
                             package %1$s;
                                                 
-                            import %1$s.%4$s;
+                            import %1$s.%3$s;
                             import jdk.incubator.vector.FloatVector;
                             import jdk.incubator.vector.VectorOperators;
                             import jdk.incubator.vector.VectorSpecies;
 
-                            public class %2$s implements %4$s<%3$s> {
-                                private final VectorSpecies<Float> species = FloatVector.SPECIES_128;
-                                
-                            """, packageName,
-                    simpleApiName,
-                    simpleVectorName,
-                    "IFVectorApi"
+                            public class %2$s implements \
+                            """,
+                    packageName,
+                    apiName,
+                    interfaceName
             ));
-            writeVectorMethod(writer, simpleVectorName, "add", '+', th, lanes);
-            writeScalarMethod(writer, simpleVectorName, "add", '+', th, lanes);
-            writeVectorMethod(writer, simpleVectorName, "sub", '-', th, lanes);
-            writeScalarMethod(writer, simpleVectorName, "sub", '-', th, lanes);
-            writeVectorMethod(writer, simpleVectorName, "mul", '*', th, lanes);
-            writeScalarMethod(writer, simpleVectorName, "mul", '*', th, lanes);
+            writer.write(classes.stream()
+                    .map(element -> String.format("%1$s<%2$s> ", interfaceName, element.toString()))
+                    .collect(Collectors.joining(", ")));
+            writer.write(String.format("""
+                    {
+                        private final VectorSpecies<Float> species = %s;
+                        
+                    """, SPECIES_ELEMENT
+            ));
+            for (var element : classes) {
+                var type = element.toString();
+                var annotation = element.getAnnotation(SimdVec.class);
+                var lanes = annotation.lanes();
+                var th = (lanes / SPECIES_LANES) * SPECIES_LANES;
 
-            writeDot(writer, simpleVectorName, th, lanes);
-            writeCross(writer, simpleVectorName, th, lanes);
-            writeEquals(writer, simpleVectorName, th, lanes);
+                writeVectorMethod(writer, type, "add","add", '+', th, lanes);
+                writeScalarMethod(writer, type, "add","add", '+', th, lanes);
+                writeVectorMethod(writer, type, "sub","sub", '-', th, lanes);
+                writeScalarMethod(writer, type, "sub","sub", '-', th, lanes);
+                writeVectorMethod(writer, type, "mul","mul", '*', th, lanes);
+                writeScalarMethod(writer, type, "mul","mul", '*', th, lanes);
+
+                writeDot(writer, type, th, lanes);
+                writeCross(writer, type, th, lanes);
+                writeEquals(writer, type, th, lanes);
+            }
 
             writer.write("""
                     }
@@ -81,7 +98,80 @@ public class SimdProcessor extends AbstractProcessor {
         }
     }
 
-    private void writeVectorMethod(Writer writer, String type, String name, char operator, int th, int lanes) throws IOException {
+    private void createMatrixApi(Set<? extends Element> classes, String packageName, String apiName, String interfaceName) throws IOException {
+        var matrixMap = new TreeMap<Integer, TreeMap<Integer, Element>>();
+        for (var element : classes) {
+            var annotation = element.getAnnotation(SimdMatrix.class);
+            matrixMap.putIfAbsent(annotation.rows(), new TreeMap<>());
+            matrixMap.get(annotation.rows()).put(annotation.columns(), element);
+        }
+
+        var file = processingEnv.getFiler().createSourceFile(packageName + "." + apiName);
+        try (var writer = file.openWriter()) {
+            writer.write(String.format("""
+                            package %1$s;
+                                                
+                            import %1$s.%3$s;
+                            import jdk.incubator.vector.FloatVector;
+                            import jdk.incubator.vector.VectorOperators;
+                            import jdk.incubator.vector.VectorSpecies;
+
+                            public class %2$s implements \
+                            """,
+                    packageName,
+                    apiName,
+                    interfaceName
+            ));
+            writer.write(classes.stream()
+                    .map(element -> String.format("%1$s<%2$s> ", interfaceName, element.toString()))
+                    .collect(Collectors.joining(", ")));
+            writer.write(String.format("""
+                    {
+                        private final VectorSpecies<Float> species = %s;
+                        
+                    """, SPECIES_ELEMENT
+            ));
+            for (var element : classes) {
+                var type = element.toString();
+                var annotation = element.getAnnotation(SimdMatrix.class);
+                var lanes = annotation.rows() * annotation.columns();
+                var th = (lanes / SPECIES_LANES) * SPECIES_LANES;
+
+                writeVectorMethod(writer, type, "add", "add",'+', th, lanes);
+                writeScalarMethod(writer, type, "add", "add",'+', th, lanes);
+                writeVectorMethod(writer, type, "sub", "sub",'-', th, lanes);
+                writeScalarMethod(writer, type, "sub", "sub",'-', th, lanes);
+                writeVectorMethod(writer, type, "_mul","mul", '*', th, lanes);
+                writeScalarMethod(writer, type, "mul", "mul",'*', th, lanes);
+
+                // matrix multiplications
+                for (var element1 : classes) {
+                    var otherAnnotation = element.getAnnotation(SimdMatrix.class);
+                    if (annotation.columns() == otherAnnotation.rows()) {
+                        Element result = null;
+                        var resultMap = matrixMap.get(annotation.rows());
+                        if (resultMap != null) {
+                            result = resultMap.get(otherAnnotation.columns());
+                        }
+                        if (result != null) {
+                            var otherType = element1.toString();
+                            var resultType = result.toString();
+                            writeMatrixMul(writer, type, otherType, resultType, annotation.rows(),
+                                    annotation.columns(), otherAnnotation.rows(), otherAnnotation.columns());
+                        }
+                    }
+                }
+
+                writeEquals(writer, type, th, lanes);
+            }
+
+            writer.write("""
+                    }
+                    """);
+        }
+    }
+
+    private void writeVectorMethod(Writer writer, String type, String name, String internalName, char operator, int th, int lanes) throws IOException {
         writer.write(String.format("""
                     @Override
                     public void %1$s(%2$s a, %2$s b, %2$s r) {
@@ -92,7 +182,7 @@ public class SimdProcessor extends AbstractProcessor {
                             FloatVector.fromArray(species, a.data, %1$d)
                                     .%2$s(FloatVector.fromArray(species, b.data, %1$d))
                                     .intoArray(r.data, %1$d);
-                    """, i, name));
+                    """, i, internalName));
         }
         for (; i < lanes; i += 1) {
             writer.write(String.format("""
@@ -102,7 +192,7 @@ public class SimdProcessor extends AbstractProcessor {
         writer.write("    }\n");
     }
 
-    private void writeScalarMethod(Writer writer, String type, String name, char operator, int th, int lanes) throws IOException {
+    private void writeScalarMethod(Writer writer, String type, String name, String internalName, char operator, int th, int lanes) throws IOException {
         writer.write(String.format("""
                     @Override
                     public void %1$s(%2$s a, float s, %2$s r) {
@@ -113,7 +203,7 @@ public class SimdProcessor extends AbstractProcessor {
                             FloatVector.fromArray(species, a.data, %1$d)
                                     .%2$s(s)
                                     .intoArray(r.data, %1$d);
-                    """, i, name));
+                    """, i, internalName));
         }
         for (; i < lanes; i += 1) {
             writer.write(String.format("""
@@ -149,6 +239,7 @@ public class SimdProcessor extends AbstractProcessor {
     }
 
     private void writeCross(Writer writer, String type, int th, int lanes) throws IOException {
+        // todo implement
         writer.write(String.format("""
                     @Override
                     public void cross(%1$s a, %1$s b, %1$s r) {
@@ -198,5 +289,16 @@ public class SimdProcessor extends AbstractProcessor {
                             
                             && \
                 """, statements)));
+    }
+
+    private void writeMatrixMul(Writer writer, String type, String otherType, String resultType,
+                                int leftRows, int leftColumns, int rightRows, int rightColumns) throws IOException {
+        // todo implement
+        writer.write(String.format("""
+                    @Override
+                    public void mul(%1$s a, %2$s b, %3$s r) {
+                        
+                    }
+                """, type, otherType, resultType));
     }
 }

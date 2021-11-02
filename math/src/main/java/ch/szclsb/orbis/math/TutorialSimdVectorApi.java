@@ -5,7 +5,7 @@ import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
 
-public class TutorialSimdVectorApi<T extends FVector> implements IFVectorApi<T> {
+public class TutorialSimdVectorApi<T extends FVector> {
     private final VectorSpecies<Float> species;
     private final int lanes, th, size;
 
