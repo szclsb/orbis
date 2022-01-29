@@ -135,13 +135,15 @@ public class SimdProcessor extends AbstractProcessor {
             writeVectorMethod(writer, simpleMatrixName, "_mul", "mul", '*', th, lanes);
             writeScalarMethod(writer, simpleMatrixName, "mul", "mul", '*', th, lanes);
 
-            // matrix multiplications
+
             writer.write(String.format("""
                     @Override
-                    public void mul(%1$s a, %2$s b, %2$s r) {
+                    public <B extends %2$s, R extends %2$s> void mul(%1$s a, B b, R r) {
                         throw new UnsupportedOperationException();
                     }
                 """, simpleMatrixName, "FMatrix"));
+
+            // matrix multiplications
             for (var element1 : elements) {
                 var otherAnnotation = element.getAnnotation(SimdMatrix.class);
                 if (matAnnotation.columns() == otherAnnotation.rows()) {
@@ -158,6 +160,7 @@ public class SimdProcessor extends AbstractProcessor {
                     }
                 }
             }
+
 
             writeEquals(writer, simpleMatrixName, th, lanes);
             writer.write("""

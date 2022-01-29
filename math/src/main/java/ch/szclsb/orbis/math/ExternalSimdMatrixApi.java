@@ -72,12 +72,11 @@ public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<
     }
 
     @Override
-    public void mul(T a, FMatrix b, FMatrix r) {
+    public <B extends FMatrix, R extends FMatrix> void mul(T a, B b, R r) {
         var rowSize = a.getRows();
         var columnSize = b.getColumns();
         var depthSize = a.getColumns();
 
-        var rowVecs = rowSize / lanes;
         var columnVecs = depthSize / lanes;
 
         if (r.getRows() != rowSize || r.getColumns() != columnSize || b.getRows() != depthSize) {
@@ -93,14 +92,14 @@ public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<
         }
 
         // calculate result
-        for (var u = 0; u < rowVecs; u++) {
+        for (var u = 0; u < rowSize; u++) {
             var ac = u * depthSize;
             var rc = u * columnSize;
             var i = 0;
             for (var v = 0; v < columnVecs; v += 1) {
                 var vc = FloatVector.zero(species);
                 for (var k = 0; k < depthSize; k += 1) {
-                    vc.add(bColumns[v][k].mul(a.data[ac + k]));
+                    vc = vc.add(bColumns[v][k].mul(a.data[ac + k]));
                 }
                 vc.intoArray(r.data, rc + i);
                 i += lanes;
