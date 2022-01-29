@@ -10,4 +10,6 @@ public interface IFVectorApi<T extends FVector> {
     float dot(T a, T b);
     void cross(T a, T b, T r);
     boolean equals(T a, T b);
+//    float normSquared(T a);
+//    float norm(T a);
 }
