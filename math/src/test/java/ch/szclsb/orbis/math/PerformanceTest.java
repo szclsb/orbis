@@ -3,10 +3,7 @@ package ch.szclsb.orbis.math;
 import ch.szclsb.orbis.processor.SimdMatrix;
 import ch.szclsb.orbis.processor.SimdVec;
 import jdk.incubator.vector.FloatVector;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -141,7 +138,7 @@ public class PerformanceTest {
     }
 
     @Nested
-    @Tag("CUSTOM_SIMD")
+    @Tag("EXTERNAL_SIMD")
     public class CustomSimdTest {
         @AfterAll
         public static void afterClass() {
@@ -152,7 +149,7 @@ public class PerformanceTest {
         @Tag("Vector4f")
         public class Vector4fTest {
             private final Class<FVector4> tClass = FVector4.class;
-            private final IFVectorApi<FVector4> api = new TutorialSimdVectorApi<>(tClass, FloatVector.SPECIES_128);
+            private final IFVectorApi<FVector4> api = new ExternalSimdVectorApi<>(tClass, FloatVector.SPECIES_128);
             private final FVector4 a = new FVector4(1f, 2f, 3f, 4f);
             private final FVector4 b = new FVector4(-3f, -7f, -21f, -93f);
             private final float s = 97f;
@@ -199,10 +196,72 @@ public class PerformanceTest {
                 print(api, tClass, "dot", time);
             }
         }
+
+        @Nested
+        @Tag("Matrix4f")
+        public class Matrix4fTest {
+            private final Class<FMatrix4x4> tClass = FMatrix4x4.class;
+            private final IFMatrixApi<FMatrix4x4> api = new ExternalSimdMatrixApi<>(tClass, FloatVector.SPECIES_128);
+            private final FMatrix4x4 a = new FMatrix4x4(
+                    4f, 8f, 3f, 1f,
+                    15f, 6f, 7f, 12f,
+                    9f, 2f, 11f, 9f,
+                    5f, 3f, 7f, 2f
+            );
+            private final FMatrix4x4 b = new FMatrix4x4(
+                    7f, 10f, 3f, 14f,
+                    11f, 6f, 7f, 13f,
+                    1, 4f, 15f, 5f,
+                    12f, 8f, 2f, 9f
+            );
+            private final float s = 97f;
+
+            @Test
+            public void testAdd() {
+                var time = testApiAdd(api, a, b, createMatrix(tClass));
+                print(api, tClass, "add", time);
+            }
+
+            @Test
+            public void testAddScalar() {
+                var time = testApiAdd(api, a, s, createMatrix(tClass));
+                print(api, tClass, "add scalar", time);
+            }
+
+            @Test
+            public void testSub() {
+                var time = testApiSub(api, a, b, createMatrix(tClass));
+                print(api, tClass, "sub", time);
+            }
+
+            @Test
+            public void testSubScalar() {
+                var time = testApiSub(api, a, s, createMatrix(tClass));
+                print(api, tClass, "sub scalar", time);
+            }
+
+            @Test
+            public void testMul() {
+                var time = testApiMul(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul elem", time);
+            }
+
+            @Test
+            public void testMulScalar() {
+                var time = testApiMul(api, a, s, createMatrix(tClass));
+                print(api, tClass, "mul scalar", time);
+            }
+
+            @Test
+            public void testMulMat() {
+                var time = testApiMulMat(api, a, b, createMatrix(tClass));
+                print(api, tClass, "mul", time);
+            }
+        }
     }
 
     @Nested
-    @Tag("SIMD")
+    @Tag("INTERNAL_SIMD")
     public class SimdTest {
         @AfterAll
         public static void afterClass() {
@@ -317,6 +376,7 @@ public class PerformanceTest {
             }
 
             @Test
+            @Disabled
             public void testMulMat() {
                 var time = testApiMulMat(api, a, b, createMatrix(tClass));
                 print(api, tClass, "mul", time);

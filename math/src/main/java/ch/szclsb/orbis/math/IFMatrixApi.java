@@ -7,6 +7,6 @@ public interface IFMatrixApi<T extends FMatrix> {
     void sub(T a, float s, T r);
     void mul(T a, FMatrix b, FMatrix r);
     void mul(T a, float s, T r);
-    void _mul(T a, T b, T r);
+    void _mul(T a, T b, T r);  //element wise
     boolean equals(T a, T b);
 }

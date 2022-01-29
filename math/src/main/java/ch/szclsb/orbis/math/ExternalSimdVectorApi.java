@@ -5,15 +5,15 @@ import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
 
-public class TutorialSimdVectorApi<T extends FVector> implements IFVectorApi<T> {
+public class ExternalSimdVectorApi<T extends FVector> implements IFVectorApi<T> {
     private final VectorSpecies<Float> species;
     private final int lanes, th, size;
 
-    public TutorialSimdVectorApi(Class<T> tClass) {
+    public ExternalSimdVectorApi(Class<T> tClass) {
         this(tClass, FloatVector.SPECIES_PREFERRED);
     }
 
-    public TutorialSimdVectorApi(Class<T> tClass, VectorSpecies<Float> species) {
+    public ExternalSimdVectorApi(Class<T> tClass, VectorSpecies<Float> species) {
         this.species = species;
         this.lanes = species.length();
         this.size = tClass.getAnnotation(SimdVec.class).lanes();
