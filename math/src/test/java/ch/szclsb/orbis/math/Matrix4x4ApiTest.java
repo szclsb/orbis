@@ -169,7 +169,7 @@ public class Matrix4x4ApiTest {
                     322f, 310f, 216f, 431f,
                     204f, 218f, 224f, 288f,
                     99f, 112f, 145f, 162f
-            }, R.data);
+            }, R.data, MathUtils.TOLERANCE);
         }
     }
 
@@ -225,7 +225,7 @@ public class Matrix4x4ApiTest {
                 26f, 12f, 14f, 25f,
                 10f, 6f, 26f, 14f,
                 17f, 11f, 9f, 11f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testAddScalar(IFMatrixApi<FMatrix4x4> api) {
@@ -242,7 +242,7 @@ public class Matrix4x4ApiTest {
                 18f, 9f, 10f, 15f,
                 12f, 5f, 14f, 12f,
                 8f, 6f, 10f, 5f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testSub(IFMatrixApi<FMatrix4x4> api) {
@@ -265,7 +265,7 @@ public class Matrix4x4ApiTest {
                 4f, 0f, 0f, -1f,
                 8f, -2f, -4f, 4f,
                 -7f, -5f, 5f, -7f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testSubScalar(IFMatrixApi<FMatrix4x4> api) {
@@ -282,7 +282,7 @@ public class Matrix4x4ApiTest {
                 12f, 3f, 4f, 9f,
                 6f, -1f, 8f, 6f,
                 2f, 0f, 4f, -1f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testMulElements(IFMatrixApi<FMatrix4x4> api) {
@@ -305,7 +305,7 @@ public class Matrix4x4ApiTest {
                 165f, 36f, 49f, 156f,
                 9f, 8f, 165f, 45f,
                 60f, 24f, 14f, 18f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testMulScalar(IFMatrixApi<FMatrix4x4> api) {
@@ -322,7 +322,7 @@ public class Matrix4x4ApiTest {
                 45f, 18f, 21f, 36f,
                 27f, 6f, 33f, 27f,
                 15f, 9f, 21f, 6f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 
     protected void testMulMatrix(IFMatrixApi<FMatrix4x4> api) {
@@ -345,6 +345,6 @@ public class Matrix4x4ApiTest {
                 322f, 310f, 216f, 431f,
                 204f, 218f, 224f, 288f,
                 99f, 112f, 145f, 162f
-        }, R.data);
+        }, R.data, MathUtils.TOLERANCE);
     }
 }

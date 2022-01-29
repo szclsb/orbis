@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 @Tag("UnitTest")
-public class VectorApiTest {
+public class Vector3ApiTest {
     @Nested
     public class PojoVector3ApiTest {
         private final PojoVectorApi<FVector3> api = new PojoVectorApi<>(FVector3.class);
@@ -187,7 +187,7 @@ public class VectorApiTest {
         api.add(a, b, r);
         assertArrayEquals(new float[]{
                 5f, 7f, 9f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testAddScalar(IFVectorApi<FVector3> api) {
@@ -196,7 +196,7 @@ public class VectorApiTest {
         api.add(a, 3f, r);
         assertArrayEquals(new float[]{
                 4f, 5f, 6f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testSub(IFVectorApi<FVector3> api) {
@@ -206,7 +206,7 @@ public class VectorApiTest {
         api.sub(a, b, r);
         assertArrayEquals(new float[]{
                 -3f, -3f, -3f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testSubScalar(IFVectorApi<FVector3> api) {
@@ -215,7 +215,7 @@ public class VectorApiTest {
         api.sub(a, 3f, r);
         assertArrayEquals(new float[]{
                 -2f, -1f, 0f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testMul(IFVectorApi<FVector3> api) {
@@ -225,7 +225,7 @@ public class VectorApiTest {
         api.mul(a, b, r);
         assertArrayEquals(new float[]{
                 4f, 10f, 18f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testMulScalar(IFVectorApi<FVector3> api) {
@@ -234,7 +234,7 @@ public class VectorApiTest {
         api.mul(a, 3f, r);
         assertArrayEquals(new float[]{
                 3f, 6f, 9f
-        }, r.data);
+        }, r.data, MathUtils.TOLERANCE);
     }
 
     protected void testDot(IFVectorApi<FVector3> api) {
