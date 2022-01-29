@@ -4,7 +4,7 @@ import ch.szclsb.orbis.processor.SimdMatrix;
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorSpecies;
 
-public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<T> {
+public class ExternalSimdMatrixApi<T extends FMatrix> implements IFMatrixApi<T> {
     private final VectorSpecies<Float> species;
     private final int lanes, th, size;
 
@@ -77,7 +77,7 @@ public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<
         var columnSize = b.getColumns();
         var depthSize = a.getColumns();
 
-        var columnVecs = depthSize / lanes;
+        var columnVecs = columnSize / lanes;
 
         if (r.getRows() != rowSize || r.getColumns() != columnSize || b.getRows() != depthSize) {
             throw new UnsupportedOperationException("Invalid matrix dimensions");
@@ -98,8 +98,9 @@ public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<
             var i = 0;
             for (var v = 0; v < columnVecs; v += 1) {
                 var vc = FloatVector.zero(species);
+                var bColumn = bColumns[v];
                 for (var k = 0; k < depthSize; k += 1) {
-                    vc = vc.add(bColumns[v][k].mul(a.data[ac + k]));
+                    vc = vc.add(bColumn[k].mul(a.data[ac + k]));
                 }
                 vc.intoArray(r.data, rc + i);
                 i += lanes;
@@ -107,7 +108,7 @@ public class ExternalSimdMatrixApi<T extends FMatrix4x4> implements IFMatrixApi<
             for (; i < columnSize; i += 1) {
                 var sum = 0;
                 for (var k = 0; k < depthSize; k += 1) {
-                    sum += a.data[ac + k] * b.data[rc + k];
+                    sum += a.data[ac + k] * b.data[k * columnSize + i];
                 }
                 r.data[rc + i] = sum;
             }
