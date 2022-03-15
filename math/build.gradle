@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'ch.szclsb.orbis.math' version '1.0-SNAPSHOT'
 }
 
 group 'ch.szclsb'

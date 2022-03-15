@@ -1,5 +1,14 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'orbis'
+
 include 'math'
 include 'app'
 include 'processor'
+include 'math-plugin'
 
