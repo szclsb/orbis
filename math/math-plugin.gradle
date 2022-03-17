@@ -1,9 +1,0 @@
-class MathPlugin implements Plugin<Project> {
-    void apply(Project project) {
-        project.task('math') {
-            doFirst {
-                println 'Hello from the MathPlugin'
-            }
-        }
-    }
-}

@@ -23,13 +23,15 @@ dependencies {
 }
 
 math {
+    outputDir = layout.projectDirectory.dir("src/main/java/ch/szclsb/orbis/math/generated")
+    packageName = "ch.szclsb.orbis.math.generated"
     matrices {
-        register('FMatrix4x4') {
+        register('FxMatrix4x4') {
             type = 'float'
             rows = 4
             columns = 4
         }
-        register('Vector4') {
+        register('FxVector4') {
             type = 'float'
             rows = 4
             columns = 1
@@ -40,6 +42,8 @@ math {
 compileJava {
     options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']
 }
+
+compileJava.dependsOn tasks.math
 
 java {
     toolchain {

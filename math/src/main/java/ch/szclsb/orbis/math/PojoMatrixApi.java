@@ -5,6 +5,8 @@ import ch.szclsb.orbis.processor.SimdMatrix;
 public class PojoMatrixApi<T extends FMatrix> implements IFMatrixApi<T> {
     private final int size;
 
+    private ch.szclsb.orbis.math.generated.FxMatrix4x4 test;
+
     public PojoMatrixApi(Class<T> tClass) {
         var annotation = tClass.getAnnotation(SimdMatrix.class);
         this.size = annotation.rows() * annotation.columns();
