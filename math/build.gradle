@@ -1,3 +1,5 @@
+import ch.szclsb.orbis.plugins.MathPlugin
+
 plugins {
     id 'java'
 }
@@ -8,6 +10,8 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+
+apply plugin: MathPlugin
 
 dependencies {
     implementation project(':processor')
