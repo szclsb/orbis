@@ -29,6 +29,11 @@ math {
             rows = 4
             columns = 4
         }
+        register('Vector4') {
+            type = 'float'
+            rows = 4
+            columns = 1
+        }
     }
 }
 
