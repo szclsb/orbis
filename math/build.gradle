@@ -7,11 +7,11 @@ plugins {
 group 'ch.szclsb'
 version '1.0-SNAPSHOT'
 
+apply plugin: MathPlugin
+
 repositories {
     mavenCentral()
 }
-
-apply plugin: MathPlugin
 
 dependencies {
     implementation project(':processor')
@@ -20,6 +20,16 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+math {
+    matrices {
+        register('FMatrix4x4') {
+            type = 'float'
+            rows = 4
+            columns = 4
+        }
+    }
 }
 
 compileJava {
