@@ -14,30 +14,44 @@ repositories {
 }
 
 dependencies {
-    implementation project(':processor')
-
-    annotationProcessor project(':processor')
-
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 math {
-    outputDir = layout.projectDirectory.dir("src/main/java/ch/szclsb/orbis/math/generated")
-    packageName = "ch.szclsb.orbis.math.generated"
+    outputDir = layout.projectDirectory.dir("src/main/gen/ch/szclsb/orbis/math")
+    apiPackage = "ch.szclsb.orbis.math"
+    apiInterfaceName = "IFMatrixApi"
+    vecApiInterfaceName = "IFVectorApi"
+    abstractMatPackage = "ch.szclsb.orbis.math"
+    abstractMatClassName = "FMatrix"
+    generatedPackage = "ch.szclsb.orbis.math"
+    generatedClassName = "FMatrixApi"
     matrices {
-        register('FxMatrix4x4') {
+        register('FMatrix4x4') {
             type = 'float'
             rows = 4
             columns = 4
         }
-        register('FxVector4') {
+        register('FMatrix10x10') {
+            type = 'float'
+            rows = 10
+            columns = 10
+        }
+        register('FVector4') {
             type = 'float'
             rows = 4
             columns = 1
         }
+        register('FVector3') {
+            type = 'float'
+            rows = 3
+            columns = 1
+        }
     }
 }
+
+sourceSets.main.java.srcDirs 'src/main/gen'
 
 compileJava {
     options.compilerArgs += ['--add-modules', 'jdk.incubator.vector']

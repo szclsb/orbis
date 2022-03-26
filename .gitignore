@@ -21,4 +21,4 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-**/generated/
+**/src/main/gen/

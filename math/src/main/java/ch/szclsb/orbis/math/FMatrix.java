@@ -12,6 +12,6 @@ public abstract class FMatrix {
     }
 
     // used for pojo api
-    abstract int getRows();
-    abstract int getColumns();
+    public abstract int getRows();
+    public abstract int getColumns();
 }

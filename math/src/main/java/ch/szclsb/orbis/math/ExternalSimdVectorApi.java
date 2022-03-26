@@ -1,6 +1,5 @@
 package ch.szclsb.orbis.math;
 
-import ch.szclsb.orbis.processor.SimdVec;
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
@@ -14,10 +13,15 @@ public class ExternalSimdVectorApi<T extends FVector> implements IFVectorApi<T> 
     }
 
     public ExternalSimdVectorApi(Class<T> tClass, VectorSpecies<Float> species) {
-        this.species = species;
-        this.lanes = species.length();
-        this.size = tClass.getAnnotation(SimdVec.class).lanes();
-        this.th = (size / lanes) * lanes;
+        try {
+            var vec = tClass.getConstructor().newInstance();
+            this.size = vec.getSize();
+            this.species = species;
+            this.lanes = species.length();
+            this.th = (size / lanes) * lanes;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

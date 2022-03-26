@@ -1,6 +1,5 @@
 package ch.szclsb.orbis.math;
 
-import ch.szclsb.orbis.processor.SimdMatrix;
 import jdk.incubator.vector.FloatVector;
 import jdk.incubator.vector.VectorSpecies;
 
@@ -13,12 +12,17 @@ public class ExternalSimdMatrixApi<T extends FMatrix> implements IFMatrixApi<T> 
     }
 
     public ExternalSimdMatrixApi(Class<T> tClass, VectorSpecies<Float> species) {
-        var rows = tClass.getAnnotation(SimdMatrix.class).rows();
-        var columns = tClass.getAnnotation(SimdMatrix.class).columns();
-        this.species = species;
-        this.lanes = species.length();
-        this.size = rows * columns;
-        this.th = (size / lanes) * lanes;
+        try {
+            var mat = tClass.getConstructor().newInstance();
+            var rows = mat.getRows();
+            var columns = mat.getColumns();
+            this.species = species;
+            this.lanes = species.length();
+            this.size = rows * columns;
+            this.th = (size / lanes) * lanes;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

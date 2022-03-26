@@ -10,4 +10,8 @@ public abstract class FVector {
     public FVector(float[] data) {
         this.data = data;
     }
+
+    public int getSize() {
+        return data.length;
+    }
 }

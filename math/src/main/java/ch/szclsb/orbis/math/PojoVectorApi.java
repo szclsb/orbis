@@ -1,12 +1,15 @@
 package ch.szclsb.orbis.math;
 
-import ch.szclsb.orbis.processor.SimdVec;
-
 public class PojoVectorApi<T extends FVector> implements IFVectorApi<T> {
     private final int size;
 
     public PojoVectorApi(Class<T> tClass) {
-        this.size = tClass.getAnnotation(SimdVec.class).lanes();
+        try {
+            var vec = tClass.getConstructor().newInstance();
+            this.size = vec.getSize();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

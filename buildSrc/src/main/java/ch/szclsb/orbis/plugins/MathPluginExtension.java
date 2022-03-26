@@ -7,7 +7,19 @@ import org.gradle.api.provider.Property;
 public interface MathPluginExtension {
     DirectoryProperty getOutputDir();
 
-    Property<String> getPackageName();
+    Property<String> getApiPackage();
+
+    Property<String> getApiInterfaceName();
+
+    Property<String> getVecApiInterfaceName();
+
+    Property<String> getAbstractMatPackage();
+
+    Property<String> getAbstractMatClassName();
+
+    Property<String> getGeneratedPackage();
+
+    Property<String> getGeneratedClassName();
 
     NamedDomainObjectContainer<MatrixDef> getMatrices();
 }

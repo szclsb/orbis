@@ -3,13 +3,9 @@ package ch.szclsb.orbis.plugins;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 
 public abstract class MathPlugin implements Plugin<Project> {
@@ -20,33 +16,42 @@ public abstract class MathPlugin implements Plugin<Project> {
         project.task("math").doFirst(task -> {
             try {
                 var dir = extension.getOutputDir().get().getAsFile().toPath();
-                if (Files.exists(dir)) {
-                    Files.walk(dir)
-                            .filter(path -> !dir.equals(path))
-                            .sorted(Comparator.reverseOrder())
-                            .forEach(path -> {
-                                try {
-                                    Files.delete(path);
-                                } catch (IOException e) {
-                                    System.err.println("error: " + e.getMessage());
-                                }
-                            });
-                } else {
-                    Files.createDirectories(dir);
-                }
+                prepareDir(dir);
+
+                var generatedPackage = extension.getGeneratedPackage().get();
+//                var apiClassName = extension.getGeneratedClassName().get();
+                var apiPackage = extension.getApiPackage().get();
+                var apiInterfaceName = extension.getApiInterfaceName().get();
+                var vApiInterfaceName = extension.getVecApiInterfaceName().get();
+                var abstractMatPackage = extension.getAbstractMatPackage().get();
+                var abstractMatClassName = extension.getAbstractMatClassName().get();
+
+                var vectorClassWriter = new VectorClassWriter(dir, generatedPackage,
+                        apiPackage, vApiInterfaceName,
+                        abstractMatPackage, abstractMatClassName);
+                var matrixClassWriter = new MatrixClassWriter(dir, generatedPackage,
+                        apiPackage, apiInterfaceName,
+                        abstractMatPackage, abstractMatClassName);
+
+                var vectorApiWriter = new VectorApiWriter(dir, generatedPackage,
+                        apiPackage, vApiInterfaceName,
+                        abstractMatPackage, abstractMatClassName);
+                var matrixApiWriter = new MatrixApiWriter(dir, generatedPackage,
+                        apiPackage, apiInterfaceName,
+                        abstractMatPackage, abstractMatClassName);
+
                 for (var matrix : extension.getMatrices()) {
-                    var content = String.format("""
-                        package %1$s;
-                        
-                        public class %2$s {
-                            private %3$s[] data = new %3$s[%4$d];
-                            
-                            public %3$s[] get() {
-                                return data;
-                            }
-                        }
-                        """, extension.getPackageName().get(), matrix.getName(), matrix.getType().get(), matrix.getRows().get() * matrix.getColumns().get());
-                    writeFile(dir, matrix.getName(), content);
+                    var matClassName = matrix.getName();
+                    var apiClassName = matClassName + "API";
+                    var rows = matrix.getRows().get();
+                    var columns = matrix.getColumns().get();
+                    if (columns == 1 || rows == 1) {
+                        vectorClassWriter.write(matClassName, apiClassName, rows, columns);
+                        vectorApiWriter.write(matClassName, apiClassName, rows, columns);
+                    } else {
+                        matrixClassWriter.write(matClassName, apiClassName, rows, columns);
+                        matrixApiWriter.write(matClassName, apiClassName, rows, columns);
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("error: " + e.getMessage());
@@ -54,17 +59,20 @@ public abstract class MathPlugin implements Plugin<Project> {
         });
     }
 
-    private void writeFile(Path dir, String name, String content) throws IOException {
-        var file = dir.resolve(name + ".java");
-        var tmpFile = dir.resolve(name + ".tmp");
-        try (var writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(tmpFile,
-                StandardOpenOption.WRITE, StandardOpenOption.CREATE)))) {
-            writer.write(content);
-            Files.move(tmpFile, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        } catch (IOException e) {
-            System.out.println("warning: " + e.getMessage());
-        } finally {
-            Files.deleteIfExists(tmpFile);
+    private void prepareDir(Path dir) throws IOException {
+        if (Files.exists(dir)) {
+            Files.walk(dir)
+                    .filter(path -> !dir.equals(path))
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            System.err.println("error: " + e.getMessage());
+                        }
+                    });
+        } else {
+            Files.createDirectories(dir);
         }
     }
 }
