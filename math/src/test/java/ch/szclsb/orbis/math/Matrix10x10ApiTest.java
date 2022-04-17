@@ -37,7 +37,6 @@ public class Matrix10x10ApiTest {
         private final FMatrix10x10API api = new FMatrix10x10API();
 
         @Test
-        @Disabled
         /*
          * Allow calling overloaded faster method
          */

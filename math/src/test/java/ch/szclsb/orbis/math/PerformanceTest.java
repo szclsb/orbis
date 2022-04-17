@@ -1,7 +1,5 @@
 package ch.szclsb.orbis.math;
 
-import ch.szclsb.orbis.processor.SimdMatrix;
-import ch.szclsb.orbis.processor.SimdVec;
 import jdk.incubator.vector.FloatVector;
 import org.junit.jupiter.api.*;
 
@@ -34,43 +32,43 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createVector(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createVector(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createVector(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createVector(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createVector(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createVector(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, "mul scalar", time);
             }
 
             @Test
             public void testDot() {
                 var time = testApiDot(api, a, b);
-                print(api, tClass, "dot", time);
+                print(api, 4, "dot", time);
             }
         }
 
@@ -96,43 +94,43 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createMatrix(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createMatrix(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createMatrix(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createMatrix(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul elem", time);
+                print(api, 4, 4, "mul elem", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createMatrix(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, 4, "mul scalar", time);
             }
 
             @Test
             public void testMulMat() {
                 var time = testApiMulMat(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, 4, "mul", time);
             }
         }
     }
@@ -157,43 +155,43 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createVector(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createVector(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createVector(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createVector(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createVector(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createVector(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, "mul scalar", time);
             }
 
             @Test
             public void testDot() {
                 var time = testApiDot(api, a, b);
-                print(api, tClass, "dot", time);
+                print(api, 4, "dot", time);
             }
         }
 
@@ -219,43 +217,43 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createMatrix(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createMatrix(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createMatrix(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createMatrix(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul elem", time);
+                print(api, 4, 4, "mul elem", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createMatrix(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, 4, "mul scalar", time);
             }
 
             @Test
             public void testMulMat() {
                 var time = testApiMulMat(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, 4, "mul", time);
             }
         }
     }
@@ -280,43 +278,43 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createVector(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createVector(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createVector(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createVector(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createVector(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, "mul", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createVector(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, "mul scalar", time);
             }
 
             @Test
             public void testDot() {
                 var time = testApiDot(api, a, b);
-                print(api, tClass, "dot", time);
+                print(api, 4, "dot", time);
             }
         }
 
@@ -342,44 +340,44 @@ public class PerformanceTest {
             @Test
             public void testAdd() {
                 var time = testApiAdd(api, a, b, createMatrix(tClass));
-                print(api, tClass, "add", time);
+                print(api, 4, 4, "add", time);
             }
 
             @Test
             public void testAddScalar() {
                 var time = testApiAdd(api, a, s, createMatrix(tClass));
-                print(api, tClass, "add scalar", time);
+                print(api, 4, 4, "add scalar", time);
             }
 
             @Test
             public void testSub() {
                 var time = testApiSub(api, a, b, createMatrix(tClass));
-                print(api, tClass, "sub", time);
+                print(api, 4, 4, "sub", time);
             }
 
             @Test
             public void testSubScalar() {
                 var time = testApiSub(api, a, s, createMatrix(tClass));
-                print(api, tClass, "sub scalar", time);
+                print(api, 4, 4, "sub scalar", time);
             }
 
             @Test
             public void testMul() {
                 var time = testApiMul(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul elem", time);
+                print(api, 4, 4, "mul elem", time);
             }
 
             @Test
             public void testMulScalar() {
                 var time = testApiMul(api, a, s, createMatrix(tClass));
-                print(api, tClass, "mul scalar", time);
+                print(api, 4, 4, "mul scalar", time);
             }
 
             @Test
             @Disabled
             public void testMulMat() {
                 var time = testApiMulMat(api, a, b, createMatrix(tClass));
-                print(api, tClass, "mul", time);
+                print(api, 4, 4, "mul", time);
             }
         }
     }
@@ -634,17 +632,15 @@ public class PerformanceTest {
 //        }
 //    }
 
-    private static <T extends FVector> void print(IFVectorApi<T> api, Class<T> tClass, String name, long time) {
-        var size = tClass.getAnnotation(SimdVec.class).lanes();
+    private static <T extends FVector> void print(IFVectorApi<T> api, int lanes, String name, long time) {
         var className = api.getClass().getSimpleName();
         System.out.printf("%-22s lanes %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
-                className, size, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
+                className, lanes, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 
-    private static <T extends FMatrix> void print(IFMatrixApi<T> api, Class<T> tClass, String name, long time) {
-        var annotation = tClass.getAnnotation(SimdMatrix.class);
+    private static <T extends FMatrix> void print(IFMatrixApi<T> api, int rows, int columns, String name, long time) {
         var className = api.getClass().getSimpleName();
         System.out.printf("%-22s rows %2d columns %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
-                className, annotation.rows(), annotation.columns(), name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
+                className, rows, columns, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 }

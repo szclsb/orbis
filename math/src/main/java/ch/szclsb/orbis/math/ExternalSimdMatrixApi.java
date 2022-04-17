@@ -1,10 +1,15 @@
 package ch.szclsb.orbis.math;
 
 import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.VectorMask;
 import jdk.incubator.vector.VectorSpecies;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ExternalSimdMatrixApi<T extends FMatrix> implements IFMatrixApi<T> {
     private final VectorSpecies<Float> species;
+//    private final Map<Integer, VectorMask<Float>> masks;
     private final int lanes, th, size;
 
     public ExternalSimdMatrixApi(Class<T> tClass) {
@@ -17,6 +22,14 @@ public class ExternalSimdMatrixApi<T extends FMatrix> implements IFMatrixApi<T> 
             var rows = mat.getRows();
             var columns = mat.getColumns();
             this.species = species;
+//            this.masks = new TreeMap<>();
+//            for (var l = 1; l < species.length(); l++) {
+//                var array = new boolean[species.length()];
+//                for (var i = 0; i < l; i++) {
+//                    array[i] = true;
+//                }
+//                masks.put(l, VectorMask.fromArray(species, array, 0));
+//            }
             this.lanes = species.length();
             this.size = rows * columns;
             this.th = (size / lanes) * lanes;
@@ -119,41 +132,34 @@ public class ExternalSimdMatrixApi<T extends FMatrix> implements IFMatrixApi<T> 
         }
     }
 
-//    public void mul(FMatrix4x4 a, FMatrix4x4 b, FMatrix4x4 r) {
-//        for (var u = 0; u < r.)
-//
-//        var A1 = FloatVector.fromArray(species, a.data, 0);
-//        var A2 = FloatVector.fromArray(species, a.data, 4);
-//        var A3 = FloatVector.fromArray(species, a.data, 8);
-//        var A4 = FloatVector.fromArray(species, a.data, 12);
-//
-//        var B1 = FloatVector.fromArray(species, b.data, 0);
-//        var B2 = FloatVector.fromArray(species, b.data, 4);
-//        var B3 = FloatVector.fromArray(species, b.data, 8);
-//        var B4 = FloatVector.fromArray(species, b.data, 12);
-//
-//        var C1 = B1.mul(a.data[0])
-//                .add(B2.mul(a.data[1]))
-//                .add(B3.mul(a.data[2]))
-//                .add(B4.mul(a.data[3]));
-//        var C2 = B1.mul(a.data[4])
-//                .add(B2.mul((a.data[5]))
-//                .add(B3.mul((a.data[6]))
-//                .add(B4.mul((a.data[7]));
-//        var C3 = B1.mul(a.data[8])
-//                .add(B2.mul(a.data[9]))
-//                .add(B3.mul(a.data[10]))
-//                .add(B4.mul(a.data[11]));
-//        var C4 = B1.mul(a.data[12])
-//                .add(B2.mul(a.data[13]))
-//                .add(B3.mul(a.data[14]))
-//                .add(B4.mul(a.data[15]));
-//
-//        C1.intoArray(r.data, 0);
-//        C2.intoArray(r.data, 4);
-//        C3.intoArray(r.data, 8);
-//        C4.intoArray(r.data, 12);
-//    }
+    public void mul(FMatrix4x4 a, FMatrix4x4 b, FMatrix4x4 r) {
+        var B1 = FloatVector.fromArray(species, b.data, 0);
+        var B2 = FloatVector.fromArray(species, b.data, 4);
+        var B3 = FloatVector.fromArray(species, b.data, 8);
+        var B4 = FloatVector.fromArray(species, b.data, 12);
+
+        var C1 = B1.mul(a.data[0])
+                .add(B2.mul(a.data[1]))
+                .add(B3.mul(a.data[2]))
+                .add(B4.mul(a.data[3]));
+        var C2 = B1.mul(a.data[4])
+                .add(B2.mul(a.data[5]))
+                .add(B3.mul(a.data[6]))
+                .add(B4.mul(a.data[7]));
+        var C3 = B1.mul(a.data[8])
+                .add(B2.mul(a.data[9]))
+                .add(B3.mul(a.data[10]))
+                .add(B4.mul(a.data[11]));
+        var C4 = B1.mul(a.data[12])
+                .add(B2.mul(a.data[13]))
+                .add(B3.mul(a.data[14]))
+                .add(B4.mul(a.data[15]));
+
+        C1.intoArray(r.data, 0);
+        C2.intoArray(r.data, 4);
+        C3.intoArray(r.data, 8);
+        C4.intoArray(r.data, 12);
+    }
 
     @Override
     public void mul(T a, float s, T r) {

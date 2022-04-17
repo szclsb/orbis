@@ -145,7 +145,6 @@ public class Matrix4x4ApiTest {
         }
 
         @Test
-        @Disabled
         /*
          * Allow calling overloaded faster method
          */

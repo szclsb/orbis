@@ -38,7 +38,7 @@ public abstract class MathPlugin implements Plugin<Project> {
                         abstractMatPackage, abstractMatClassName);
                 var matrixApiWriter = new MatrixApiWriter(dir, generatedPackage,
                         apiPackage, apiInterfaceName,
-                        abstractMatPackage, abstractMatClassName);
+                        abstractMatPackage, abstractMatClassName, extension.getMatrices());
 
                 for (var matrix : extension.getMatrices()) {
                     var matClassName = matrix.getName();
