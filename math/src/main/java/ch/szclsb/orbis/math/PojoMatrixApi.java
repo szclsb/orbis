@@ -55,7 +55,7 @@ public class PojoMatrixApi<T extends FMatrix> implements IFMatrixApi<T> {
     }
 
     @Override
-    public <B extends FMatrix, R extends FMatrix> void mul(T a, B b, R r) {
+    public void mul(T a, FMatrix b, FMatrix r) {
         if (a.getColumns() == b.getRows() && a.getRows() == r.getRows() && b.getColumns() == r.getColumns()) {
             var rows = a.getRows();
             var cols = b.getColumns();

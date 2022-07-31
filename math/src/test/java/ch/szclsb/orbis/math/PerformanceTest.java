@@ -137,7 +137,7 @@ public class PerformanceTest {
 
     @Nested
     @Tag("EXTERNAL_SIMD")
-    public class CustomSimdTest {
+    public class ExternalSimdTest {
         @AfterAll
         public static void afterClass() {
             System.out.println();
@@ -374,10 +374,152 @@ public class PerformanceTest {
             }
 
             @Test
-            @Disabled
             public void testMulMat() {
-                var time = testApiMulMat(api, a, b, createMatrix(tClass));
-                print(api, 4, 4, "mul", time);
+//                var time = testApiMulMat(api, a, b, createMatrix(tClass));
+                var fMatrix4x4API = (FMatrix4x4API) api;
+                var r = new FMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    fMatrix4x4API.mul(a, b, r);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    fMatrix4x4API.mul(a, b, r);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    fMatrix4x4API.mul(a, b, r);
+                }
+                print(fMatrix4x4API, 4, 4, "mul", end - start);
+            }
+        }
+    }
+
+    @Nested
+    @Tag("CUSTOM_SIMD")
+    public class CustomSimdTest {
+        @AfterAll
+        public static void afterClass() {
+            System.out.println();
+        }
+
+        @Nested
+        @Tag("Matrix4f")
+        public class Matrix4fTest {
+            private final Class<FMatrix4x4> tClass = FMatrix4x4.class;
+            private final CustomMatrix4x4 a = new CustomMatrix4x4(
+                    4f, 8f, 3f, 1f,
+                    15f, 6f, 7f, 12f,
+                    9f, 2f, 11f, 9f,
+                    5f, 3f, 7f, 2f
+            );
+            private final CustomMatrix4x4 b = new CustomMatrix4x4(
+                    7f, 10f, 3f, 14f,
+                    11f, 6f, 7f, 13f,
+                    1, 4f, 15f, 5f,
+                    12f, 8f, 2f, 9f
+            );
+            private final float s = 97f;
+
+            @Test
+            public void testAdd() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    r = a.add(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.add(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.add(b);
+                }
+                print("CustomMatrix4x4", 4, 4, "add", end - start);
+            }
+
+            @Test
+            public void testAddScalar() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                     r = a.add(s);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.add(s);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.add(s);
+                }
+                print("CustomMatrix4x4", 4, 4, "add scalar", end - start);
+            }
+
+            @Test
+            public void testSub() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    r = a.sub(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.sub(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.sub(b);
+                }
+                print("CustomMatrix4x4", 4, 4, "sub", end - start);
+            }
+
+            @Test
+            public void testSubScalar() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    r = a.sub(s);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.sub(s);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.sub(s);
+                }
+                print("CustomMatrix4x4", 4, 4, "sub scalar", end - start);
+            }
+
+            @Test
+            public void testMulScalar() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    r = a.mul(s);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.mul(s);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.mul(s);
+                }
+                print("CustomMatrix4x4", 4, 4, "mul scalar", end - start);
+            }
+
+            @Test
+            public void testMulMat() {
+                var r = new CustomMatrix4x4();
+                for(var i = 0; i < LEAD_ITERATIONS; i++) {
+                    r = a.mul(b);
+                }
+                var start = System.currentTimeMillis();
+                for(var i = 0; i < ITERATIONS; i++) {
+                    r = a.mul(b);
+                }
+                var end = System.currentTimeMillis();
+                for(var i = 0; i < FOLLOW_UP_ITERATIONS; i++) {
+                    r = a.mul(b);
+                }
+                print("CustomMatrix4x4", 4, 4, "mul", end - start);
             }
         }
     }
@@ -642,5 +784,10 @@ public class PerformanceTest {
         var className = api.getClass().getSimpleName();
         System.out.printf("%-22s rows %2d columns %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
                 className, rows, columns, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
+    }
+
+    private static <T extends FMatrix> void print(String apiName, int rows, int columns, String name, long time) {
+        System.out.printf("%-22s rows %2d columns %2d  Operation %-12s x%.1e took %6.1f ns/op%n",
+                apiName, rows, columns, name, (float) ITERATIONS, (time / (0.000001f * ITERATIONS)));
     }
 }

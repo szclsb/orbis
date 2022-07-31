@@ -61,12 +61,6 @@ public class MatrixApiWriter extends ApiWriter {
             writeScalarMethod(writer, matClassName, "mul", "mul", '*', th, lanes);
 
 
-            writer.write(String.format("""
-                        @Override
-                        public <B extends %2$s, R extends %2$s> void mul(%1$s a, B b, R r) {
-                            throw new UnsupportedOperationException();
-                        }
-                    """, matClassName, "FMatrix"));
 
             var it1 = matrices.stream()
                     .filter(m -> m.getRows().get().equals(columns))
@@ -86,6 +80,13 @@ public class MatrixApiWriter extends ApiWriter {
                             rows, resultColumn, columns, cth);
                 }
             }
+
+            writer.write(String.format("""
+                        @Override
+                        public void mul(%1$s a, %2$s b, %2$s r) {
+                            throw new UnsupportedOperationException();
+                        }
+                    """, matClassName, "FMatrix"));
 
             writeEquals(writer, matClassName, th, lanes);
 
