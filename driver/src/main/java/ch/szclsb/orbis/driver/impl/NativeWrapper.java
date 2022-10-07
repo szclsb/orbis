@@ -1,11 +1,26 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.driver.impl;
 
+import ch.szclsb.orbis.driver.IGLFW;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class NativeWrapper implements IGLFW {
+    private static final Path LIB_DIR = Path.of(System.getProperty("user.dir"));
     private static final Linker LINKER = Linker.nativeLinker();
     private static final SymbolLookup LOADER = SymbolLookup.loaderLookup();
+
+    private static void loadProvidedLibrary(String name) throws IOException {
+        var libPath = LIB_DIR.resolve(name);
+        if (!Files.exists(libPath)) {
+            throw new FileNotFoundException(String.format("Library %s was not found int the directory <EXEC_JAR>/libs", name));
+        }
+        System.load(libPath.toAbsolutePath().toString());
+    }
 
     private static MemorySegment loadSymbol(String name) {
         return LOADER.lookup(name).orElseThrow(() -> new UnsatisfiedLinkError("unable to find symbol " + name));
@@ -20,11 +35,9 @@ public class NativeWrapper implements IGLFW {
     private final MethodHandle glfwSwapBuffers;
     private final MethodHandle glfwPollEvents;
 
-    public NativeWrapper() {
-        var dir = System.getProperty("user.dir");
+    public NativeWrapper() throws Exception {
         System.loadLibrary("opengl32");
-        System.load(dir + "/glfw/glfw3.dll");
-
+        loadProvidedLibrary( "glfw3.dll");
         this.glfwInit = LINKER.downcallHandle(loadSymbol("glfwInit"), FunctionDescriptor.of(ValueLayout.JAVA_INT));
         this.glfwTerminate = LINKER.downcallHandle(loadSymbol("glfwTerminate"), FunctionDescriptor.ofVoid());
         this.glfwCreateWindow = LINKER.downcallHandle(loadSymbol("glfwCreateWindow"), FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_INT, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS));
