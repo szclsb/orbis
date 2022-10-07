@@ -22,7 +22,7 @@ public interface IGLFW {
 
     int shouldWindowClose(MemoryAddress window) throws Throwable;
 
-    int clear(int bitmask) throws Throwable;
+    void clear(int bitmask) throws Throwable;
 
     void swapBuffers(MemoryAddress window) throws Throwable;
 

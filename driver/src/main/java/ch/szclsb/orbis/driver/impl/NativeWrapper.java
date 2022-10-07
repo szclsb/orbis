@@ -74,8 +74,8 @@ public class NativeWrapper implements IGLFW {
     }
 
     @Override
-    public int clear(int bitmask) throws Throwable {
-        return (int) glClear.invoke(bitmask);
+    public void clear(int bitmask) throws Throwable {
+        glClear.invoke(bitmask);
     }
 
     @Override
