@@ -1,22 +1,30 @@
 package ch.szclsb.orbis.app;
 
-import ch.szclsb.orbis.driver.IGLFW;
+import ch.szclsb.orbis.driver.GLFW;
+import ch.szclsb.orbis.driver.OpenGL;
+import ch.szclsb.orbis.driver.foreign.ForeignGLFW;
+import ch.szclsb.orbis.driver.foreign.ForeignOpenGL;
+import ch.szclsb.orbis.driver.foreign.Introspector;
 
 import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
 
+import static ch.szclsb.orbis.driver.OpenGL.*;
+
 public class Triangle {
     public static void main(String[] args) {
+        Introspector.loadLibraries();
         try(var session = MemorySession.openShared()) {
-            var glfw = IGLFW.load();
-            run(session, glfw);
+            var glfw = new ForeignGLFW();
+            var gl = new ForeignOpenGL();
+            run(session, glfw, gl);
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    public static void run(MemorySession session, IGLFW glfw) throws Throwable {
-        if (glfw.init() == 0) {
+    public static void run(MemorySession session, GLFW glfw, OpenGL gl) throws Throwable {
+        if (glfw.init() == GL_FALSE) {
             glfw.terminate();
             return;
         }
@@ -27,8 +35,8 @@ public class Triangle {
             return;
         }
         glfw.makeContextCurrent(window);
-        while (glfw.shouldWindowClose(window) == 0) {
-            glfw.clear(IGLFW.GL_COLOR_BUFFER_BIT);
+        while (glfw.shouldWindowClose(window) == GL_FALSE) {
+            gl.clear(GL_COLOR_BUFFER_BIT);
             glfw.swapBuffers(window);
             glfw.pollEvents();
         }
