@@ -23,17 +23,16 @@ public class ForeignOpenGL implements OpenGL {
     private final MethodHandle glLinkProgram;
     private final MethodHandle glUseProgram;
 
-//    private final MethodHandle glGenVertexArrays;
-//    private final MethodHandle glBindVertexArray;
-//    private final MethodHandle glGenBuffers;
-//    private final MethodHandle glIsBuffer;
-//    private final MethodHandle glVertexAttribPointer;
-//    private final MethodHandle glEnableVertexAttribArray;
-//    private final MethodHandle glBindBuffer;
-//    private final MethodHandle glBufferData;
-//    private final MethodHandle glBufferSubData;
-//    private final MethodHandle glGetBufferSubData;
-//    private final MethodHandle glDeleteBuffers;
+    private final MethodHandle glGenVertexArrays;
+    private final MethodHandle glBindVertexArray;
+    private final MethodHandle glGenBuffers;
+    private final MethodHandle glIsBuffer;
+    private final MethodHandle glVertexAttribPointer;
+    private final MethodHandle glEnableVertexAttribArray;
+    private final MethodHandle glBindBuffer;
+    private final MethodHandle glBufferData;
+    private final MethodHandle glBufferSubData;
+    private final MethodHandle glDeleteBuffers;
 
 //    private final MethodHandle getUniformLocation;
 //    private final MethodHandle glUniform1iv;
@@ -52,21 +51,32 @@ public class ForeignOpenGL implements OpenGL {
 
     public ForeignOpenGL() {
 
-        this.glCreateShader         = loadMethod("__glewCreateShader", JAVA_INT, JAVA_INT);
-        this.glShaderSource         = loadMethod("__glewShaderSource", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glCompileShader        = loadMethod("__glewCompileShader", null, JAVA_INT);
-        this.glGetShaderiv          = loadMethod("__glewGetShaderiv", null, JAVA_INT, JAVA_INT, ADDRESS);
-        this.glGetShaderInfoLog     = loadMethod("__glewGetShaderInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glDeleteShader         = loadMethod("__glewDeleteShader", null, JAVA_INT);
+        this.glCreateShader            = loadMethod("__glewCreateShader", JAVA_INT, JAVA_INT);
+        this.glShaderSource            = loadMethod("__glewShaderSource", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+        this.glCompileShader           = loadMethod("__glewCompileShader", null, JAVA_INT);
+        this.glGetShaderiv             = loadMethod("__glewGetShaderiv", null, JAVA_INT, JAVA_INT, ADDRESS);
+        this.glGetShaderInfoLog        = loadMethod("__glewGetShaderInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+        this.glDeleteShader            = loadMethod("__glewDeleteShader", null, JAVA_INT);
 
-        this.glCreateProgram        = loadMethod("__glewCreateProgram", JAVA_INT);
-        this.glAttachShader         = loadMethod("__glewAttachShader", null, JAVA_INT, JAVA_INT);
-        this.glLinkProgram          = loadMethod("__glewLinkProgram", null, JAVA_INT);
-        this.glGetProgramiv         = loadMethod("__glewGetProgramiv", null, JAVA_INT, JAVA_INT, ADDRESS);
-        this.glGetProgramInfoLog    = loadMethod("__glewGetProgramInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glUseProgram           = loadMethod("__glewUseProgram", null, JAVA_INT);
+        this.glCreateProgram           = loadMethod("__glewCreateProgram", JAVA_INT);
+        this.glAttachShader            = loadMethod("__glewAttachShader", null, JAVA_INT, JAVA_INT);
+        this.glLinkProgram             = loadMethod("__glewLinkProgram", null, JAVA_INT);
+        this.glGetProgramiv            = loadMethod("__glewGetProgramiv", null, JAVA_INT, JAVA_INT, ADDRESS);
+        this.glGetProgramInfoLog       = loadMethod("__glewGetProgramInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+        this.glUseProgram              = loadMethod("__glewUseProgram", null, JAVA_INT);
 
-        this.glClear                = loadMethod("glClear", null, JAVA_INT);
+        this.glGenVertexArrays         = loadMethod("__glewGenVertexArrays", null, JAVA_INT, ADDRESS);
+        this.glBindVertexArray         = loadMethod("__glewBindVertexArray", null, JAVA_INT);
+        this.glGenBuffers              = loadMethod("__glewGenBuffers", null, JAVA_INT, ADDRESS);
+        this.glBindBuffer              = loadMethod("__glewBindBuffer", null, JAVA_INT, JAVA_INT);
+        this.glIsBuffer                = loadMethod("__glewIsBuffer", JAVA_INT, JAVA_INT);
+        this.glVertexAttribPointer     = loadMethod("__glewVertexAttribPointer", null, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
+        this.glEnableVertexAttribArray = loadMethod("__glewEnableVertexAttribArray", null, JAVA_INT);
+        this.glBufferData              = loadMethod("__glewBufferData", null, JAVA_INT, JAVA_INT, ADDRESS, JAVA_INT);
+        this.glBufferSubData           = loadMethod("__glewBufferSubData", null, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
+        this.glDeleteBuffers           = loadMethod("__glewDeleteBuffers", null, JAVA_INT, ADDRESS);
+
+        this.glClear                   = loadMethod("glClear", null, JAVA_INT);
     }
 
     @Override
@@ -134,5 +144,55 @@ public class ForeignOpenGL implements OpenGL {
     @Override
     public void clear(int bitmask) throws Throwable {
         glClear.invoke(bitmask);
+    }
+
+    @Override
+    public void generateVertexArrays(int number, MemoryAddress array) throws Throwable {
+        glGenVertexArrays.invoke(number, array);
+    }
+
+    @Override
+    public void bindVertexArray(int vao) throws Throwable {
+        glBindVertexArray.invoke(vao);
+    }
+
+    @Override
+    public void generateBuffers(int numbers, MemoryAddress array) throws Throwable {
+        glGenBuffers.invoke(numbers, array);
+    }
+
+    @Override
+    public void bindBuffers(int target, int vbo) throws Throwable {
+        glBindBuffer.invoke(vbo);
+    }
+
+    @Override
+    public int isBuffer(int vbo) throws Throwable {
+        return (int) glIsBuffer.invoke(vbo);
+    }
+
+    @Override
+    public void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) throws Throwable {
+        glVertexAttribPointer.invoke(index, size, type, normalized, stride, pointer);
+    }
+
+    @Override
+    public void enableVertexAttribArray(int index) throws Throwable {
+        glEnableVertexAttribArray.invoke(index);
+    }
+
+    @Override
+    public void bufferData(int target, int size, MemoryAddress data, int mode) throws Throwable {
+        glBufferData.invoke(target, size, data, mode);
+    }
+
+    @Override
+    public void bufferSubData(int target, int offset, int size, MemoryAddress data) throws Throwable {
+        glBufferSubData.invoke(target, offset, size, data);
+    }
+
+    @Override
+    public void deleteBuffers(int n, MemoryAddress buffers) throws Throwable {
+        glDeleteBuffers.invoke(n, buffers);
     }
 }

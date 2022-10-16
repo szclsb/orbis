@@ -819,4 +819,24 @@ public interface OpenGL {
     void useProgram(int program) throws Throwable;
 
     void clear(int bitmask) throws Throwable;
+
+    void generateVertexArrays(int number, MemoryAddress array) throws Throwable;
+
+    void bindVertexArray(int vao) throws Throwable;
+
+    void generateBuffers(int numbers, MemoryAddress array) throws Throwable;
+
+    void bindBuffers(int target, int vbo) throws Throwable;
+
+    int isBuffer(int vbo) throws Throwable;
+
+    void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) throws Throwable;
+
+    void enableVertexAttribArray(int index) throws Throwable;
+
+    void bufferData(int target, int size, MemoryAddress data, int mode) throws Throwable;
+
+    void bufferSubData(int target, int offset, int size, MemoryAddress data) throws Throwable;
+
+    void deleteBuffers(int n, MemoryAddress buffers) throws Throwable;
 }
