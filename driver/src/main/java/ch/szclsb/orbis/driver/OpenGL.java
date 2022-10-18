@@ -839,4 +839,32 @@ public interface OpenGL {
     void bufferSubData(int target, int offset, int size, MemoryAddress data) throws Throwable;
 
     void deleteBuffers(int n, MemoryAddress buffers) throws Throwable;
+
+    int getUniformLocation(int program, MemoryAddress name) throws Throwable;
+
+    void uniform1i(int location, int value) throws Throwable;
+
+    void uniform1iv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform2iv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform3iv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform4iv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform1f(int location, float value) throws Throwable;
+
+    void uniform1fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform2fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform3fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniform4fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniformMatrix2fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniformMatrix3fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void uniformMatrix4fv(int location, int size, MemoryAddress value) throws Throwable;
 }
