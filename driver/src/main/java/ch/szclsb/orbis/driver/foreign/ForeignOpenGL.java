@@ -9,6 +9,8 @@ import static java.lang.foreign.ValueLayout.*;
 import static ch.szclsb.orbis.driver.foreign.Introspector.loadMethod;
 
 public class ForeignOpenGL implements OpenGL {
+    private final MethodHandle glInit;
+
     private final MethodHandle glCreateShader;
     private final MethodHandle glShaderSource;
     private final MethodHandle glCompileShader;
@@ -50,8 +52,10 @@ public class ForeignOpenGL implements OpenGL {
     private final MethodHandle glUniformMatrix4fv;
 
     private final MethodHandle glClear;
+    private final MethodHandle glDrawArrays;
 
     public ForeignOpenGL() {
+        this.glInit                     = loadMethod("glewInit", JAVA_INT);
 
         this.glCreateShader             = loadMethod("__glewCreateShader", JAVA_INT, JAVA_INT);
         this.glShaderSource             = loadMethod("__glewShaderSource", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
@@ -79,12 +83,12 @@ public class ForeignOpenGL implements OpenGL {
         this.glDeleteBuffers            = loadMethod("__glewDeleteBuffers", null, JAVA_INT, ADDRESS);
 
         this.glGetUniformLocation       = loadMethod("__glewGetUniformLocation", JAVA_INT, JAVA_INT, ADDRESS);
-        this.glUniform1i               = loadMethod("__glewUniform1i", null, JAVA_INT, JAVA_INT);
+        this.glUniform1i                = loadMethod("__glewUniform1i", null, JAVA_INT, JAVA_INT);
         this.glUniform1iv               = loadMethod("__glewUniform1iv", null, JAVA_INT, JAVA_INT, ADDRESS);
         this.glUniform2iv               = loadMethod("__glewUniform2iv", null, JAVA_INT, JAVA_INT, ADDRESS);;
         this.glUniform3iv               = loadMethod("__glewUniform3iv", null, JAVA_INT, JAVA_INT, ADDRESS);;
         this.glUniform4iv               = loadMethod("__glewUniform4iv", null, JAVA_INT, JAVA_INT, ADDRESS);;
-        this.glUniform1f               = loadMethod("__glewUniform1f", null, JAVA_INT, JAVA_FLOAT);;
+        this.glUniform1f                = loadMethod("__glewUniform1f", null, JAVA_INT, JAVA_FLOAT);;
         this.glUniform1fv               = loadMethod("__glewUniform1fv", null, JAVA_INT, JAVA_INT, ADDRESS);;
         this.glUniform2fv               = loadMethod("__glewUniform2fv", null, JAVA_INT, JAVA_INT, ADDRESS);;
         this.glUniform3fv               = loadMethod("__glewUniform3fv", null, JAVA_INT, JAVA_INT, ADDRESS);;
@@ -93,12 +97,18 @@ public class ForeignOpenGL implements OpenGL {
         this.glUniformMatrix3fv         = loadMethod("__glewUniformMatrix3fv", null, JAVA_INT, JAVA_INT, ADDRESS);;
         this.glUniformMatrix4fv         = loadMethod("__glewUniformMatrix4fv", null, JAVA_INT, JAVA_INT, ADDRESS);;
 
-        this.glClear                   = loadMethod("glClear", null, JAVA_INT);
+        this.glClear                    = loadMethod("glClear", null, JAVA_INT);
+        this.glDrawArrays               = loadMethod("glDrawArrays", null, JAVA_INT, JAVA_INT, JAVA_INT);
+    }
+
+    @Override
+    public int init() throws Throwable {
+        return (int) glInit.invoke();
     }
 
     @Override
     public int createShader(int shaderType) throws Throwable {
-        return (int) glCreateShader.invoke(shaderType);
+        return (int) glCreateShader.invokeExact(shaderType);
     }
 
     @Override
@@ -155,8 +165,6 @@ public class ForeignOpenGL implements OpenGL {
     public void useProgram(int program) throws Throwable {
         glUseProgram.invoke(program);
     }
-
-
 
     @Override
     public void clear(int bitmask) throws Throwable {
@@ -275,11 +283,16 @@ public class ForeignOpenGL implements OpenGL {
 
     @Override
     public void uniformMatrix3fv(int location, int size, MemoryAddress value) throws Throwable {
-        glUniformMatrix2fv.invoke(location, size, value);
+        glUniformMatrix3fv.invoke(location, size, value);
     }
 
     @Override
     public void uniformMatrix4fv(int location, int size, MemoryAddress value) throws Throwable {
         glUniformMatrix4fv.invoke(location, size, value);
+    }
+
+    @Override
+    public void drawArrays(int mode, int first, int count) throws Throwable {
+        glDrawArrays.invoke(mode, first, count);
     }
 }

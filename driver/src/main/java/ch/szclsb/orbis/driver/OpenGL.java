@@ -794,6 +794,8 @@ public interface OpenGL {
     public static final int GL_STENCIL_BACK_WRITEMASK       = 0x8CA5;
 
 
+    int init() throws Throwable;
+
     int createShader(int shaderType) throws Throwable;
 
     void shaderSource(int shader, MemorySegment source) throws Throwable;
@@ -867,4 +869,6 @@ public interface OpenGL {
     void uniformMatrix3fv(int location, int size, MemoryAddress value) throws Throwable;
 
     void uniformMatrix4fv(int location, int size, MemoryAddress value) throws Throwable;
+
+    void drawArrays(int mode, int first, int count) throws Throwable;
 }
