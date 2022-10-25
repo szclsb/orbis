@@ -1,9 +1,6 @@
 package ch.szclsb.orbis.driver;
 
-import java.lang.foreign.MemoryAddress;
-import java.lang.foreign.MemorySegment;
-
-public interface OpenGL {
+public final class OpenGL {
     public static final int GL_FALSE = 0;
     public static final int GL_TRUE = 1;
 
@@ -792,83 +789,4 @@ public interface OpenGL {
     public static final int GL_STENCIL_BACK_REF             = 0x8CA3;
     public static final int GL_STENCIL_BACK_VALUE_MASK      = 0x8CA4;
     public static final int GL_STENCIL_BACK_WRITEMASK       = 0x8CA5;
-
-
-    int init() throws Throwable;
-
-    int createShader(int shaderType) throws Throwable;
-
-    void shaderSource(int shader, MemorySegment source) throws Throwable;
-
-    void compileShader(int shader) throws Throwable;
-
-    void getShaderiv(int shader, int pname, MemoryAddress success) throws Throwable;
-
-    void getShaderInfoLog(int shader, int maxLength, MemoryAddress length, MemoryAddress infoLog) throws Throwable;
-
-    void deleteShader(int shader) throws Throwable;
-
-    int createProgram() throws Throwable;
-
-    void attachShader(int program, int shader) throws Throwable;
-
-    void linkProgram(int program) throws Throwable;
-
-    void getProgramIv(int program, int pname, MemoryAddress success) throws Throwable;
-
-    void getProgramInfoLog(int program, int maxlength, MemoryAddress length, MemoryAddress infoLog) throws Throwable;
-
-    void useProgram(int program) throws Throwable;
-
-    void clear(int bitmask) throws Throwable;
-
-    void generateVertexArrays(int number, MemoryAddress array) throws Throwable;
-
-    void bindVertexArray(int vao) throws Throwable;
-
-    void generateBuffers(int numbers, MemoryAddress array) throws Throwable;
-
-    void bindBuffers(int target, int vbo) throws Throwable;
-
-    int isBuffer(int vbo) throws Throwable;
-
-    void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) throws Throwable;
-
-    void enableVertexAttribArray(int index) throws Throwable;
-
-    void bufferData(int target, int size, MemoryAddress data, int mode) throws Throwable;
-
-    void bufferSubData(int target, int offset, int size, MemoryAddress data) throws Throwable;
-
-    void deleteBuffers(int n, MemoryAddress buffers) throws Throwable;
-
-    int getUniformLocation(int program, MemoryAddress name) throws Throwable;
-
-    void uniform1i(int location, int value) throws Throwable;
-
-    void uniform1iv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform2iv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform3iv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform4iv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform1f(int location, float value) throws Throwable;
-
-    void uniform1fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform2fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform3fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniform4fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniformMatrix2fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniformMatrix3fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void uniformMatrix4fv(int location, int size, MemoryAddress value) throws Throwable;
-
-    void drawArrays(int mode, int first, int count) throws Throwable;
 }
