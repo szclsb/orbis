@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'ch.szclsb'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,10 +10,22 @@ repositories {
 }
 
 dependencies {
+    implementation project(':driver')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 test {
     useJUnitPlatform()
+    jvmArgs("--enable-preview --enable-native-access=ch.szclsb.orbis.driver")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(19)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += "--enable-preview"
 }
