@@ -1,11 +1,11 @@
 package ch.szclsb.orbis.app;
 
-import ch.szclsb.orbis.Application;
-import ch.szclsb.orbis.Program;
-import ch.szclsb.orbis.Shader;
-import ch.szclsb.orbis.ShaderType;
+import ch.szclsb.orbis.*;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
+import ch.szclsb.orbis.foreign.ForeignCharArray;
+import ch.szclsb.orbis.foreign.ForeignInt;
+import ch.szclsb.orbis.foreign.ForeignString;
 
 import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
@@ -23,41 +23,41 @@ public class Triangle extends Application {
         if (glfw.init() == 0) {
             return;
         }
-        var titleSegment = session.allocateUtf8String("Hello World");
-        var window = glfw.createWindow(640, 480, titleSegment.address(), MemoryAddress.NULL, MemoryAddress.NULL);
-        if (window == MemoryAddress.NULL) {
-            return;
-        }
-        glfw.makeContextCurrent(window);
+        var titleSegment = new ForeignString(session, "Hello World");
+        var window = new Window(glfw, 640, 480, titleSegment);
+        window.makeCurrent();
         if (gl.load() == 0) {
             return;
         }
 
         var program = new Program(gl);
-        try (var vertexShader = new Shader(gl, ShaderType.VERTEX);
-             var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
-            vertexShader.compile(session, """
-                #version 450 core
-                                
-                layout (location = 0) in vec3 aPos;
-                                
-                void main()
-                {
-                    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-                }
-                """);
-            fragmentShader.compile(session, """
-                #version 450 core
-                out vec4 FragColor;
-                                
-                void main()
-                {
-                    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-                }
-                """);
+        try (var shaderSession = MemorySession.openConfined();
+            var vertexShader = new Shader(gl, ShaderType.VERTEX);
+            var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
+            var success = new ForeignInt(shaderSession);
+            var infoLog = new ForeignCharArray(shaderSession, 512);
+            vertexShader.compile(new ForeignString(shaderSession, """
+                    #version 450 core
+                                    
+                    layout (location = 0) in vec3 aPos;
+                                    
+                    void main()
+                    {
+                        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                    }
+                    """), success, infoLog);
+            fragmentShader.compile(new ForeignString(shaderSession, """
+                    #version 450 core
+                    out vec4 FragColor;
+                                    
+                    void main()
+                    {
+                        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+                    }
+                    """), success, infoLog);
             program.attachShader(vertexShader);
             program.attachShader(fragmentShader);
-            program.link(session);
+            program.link(success, infoLog);
         }
 
         var vertices = session.allocateArray(ValueLayout.JAVA_FLOAT,
@@ -80,14 +80,14 @@ public class Triangle extends Application {
         gl.enableVertexAttribArray(0);
 
         // render loop
-        while (glfw.windowShouldClose(window) == 0) {
+        while (!window.shouldClose()) {
             gl.clear(GL_COLOR_BUFFER_BIT);
 
             program.use();
             gl.bindVertexArray(vao);
             gl.drawArrays(GL_TRIANGLES, 0, 3);
 
-            glfw.swapBuffers(window);
+            window.swapBuffer();
             glfw.pollEvents();
         }
 
