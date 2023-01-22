@@ -7,9 +7,15 @@ import ch.szclsb.orbis.foreign.ForeignCharArray;
 import ch.szclsb.orbis.foreign.ForeignInt;
 import ch.szclsb.orbis.foreign.ForeignString;
 
+import java.io.*;
 import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
 import java.lang.foreign.ValueLayout;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
 
@@ -36,25 +42,10 @@ public class Triangle extends Application {
             var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
             var success = new ForeignInt(shaderSession);
             var infoLog = new ForeignCharArray(shaderSession, 512);
-            vertexShader.compile(new ForeignString(shaderSession, """
-                    #version 450 core
-                                    
-                    layout (location = 0) in vec3 aPos;
-                                    
-                    void main()
-                    {
-                        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-                    }
-                    """), success, infoLog);
-            fragmentShader.compile(new ForeignString(shaderSession, """
-                    #version 450 core
-                    out vec4 FragColor;
-                                    
-                    void main()
-                    {
-                        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-                    }
-                    """), success, infoLog);
+            var vertexSource = new ForeignString(shaderSession, readResource("vertex_shader.glsl"));
+            var fragmentSource = new ForeignString(shaderSession, readResource("fragment_shader.glsl"));
+            vertexShader.compile(vertexSource, success, infoLog);
+            fragmentShader.compile(fragmentSource, success, infoLog);
             program.attachShader(vertexShader);
             program.attachShader(fragmentShader);
             program.link(success, infoLog);

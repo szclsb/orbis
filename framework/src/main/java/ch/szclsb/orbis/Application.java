@@ -4,7 +4,17 @@ import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.Introspector;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.foreign.MemorySession;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class Application {
     @SuppressWarnings("unchecked")
@@ -50,6 +60,13 @@ public abstract class Application {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    protected String readResource(String resource) throws IOException {
+        try(var reader = new BufferedReader(new InputStreamReader(Optional.ofNullable(getClass().getResourceAsStream(resource))
+                .orElseThrow(() -> new FileNotFoundException(resource))))) {
+            return reader.lines().collect(Collectors.joining("\n"));
         }
     }
 
