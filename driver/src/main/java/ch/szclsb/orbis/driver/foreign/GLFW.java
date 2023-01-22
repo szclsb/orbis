@@ -26,31 +26,63 @@ public class GLFW {
         this.glfwShutDown = loadMethod("shutDown", null);
     }
 
-    public int init() throws Throwable {
-        return (int) glfwInit.invoke();
+    public int init() {
+        try {
+            return (int) glfwInit.invoke();
+        } catch (Throwable th) {
+            throw new RuntimeException("Error invoking native method glfw.init()", th);
+        }
     }
 
-    public MemoryAddress createWindow(int width, int height, MemoryAddress title, MemoryAddress monitor, MemoryAddress share) throws Throwable {
-        return (MemoryAddress) glfwCreateWindow.invoke(width, height, title, monitor, share);
+    public MemoryAddress createWindow(int width, int height, MemoryAddress title, MemoryAddress monitor, MemoryAddress share) {
+        try {
+            return (MemoryAddress) glfwCreateWindow.invoke(width, height, title, monitor, share);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method glfw.create_window(%d, %d, &%d, &%d, &%d)",
+                    width, height, title.toRawLongValue(), monitor.toRawLongValue(), share.toRawLongValue()), th);
+        }
     }
 
-    public void makeContextCurrent(MemoryAddress window) throws Throwable {
-        glfwMakeContextCurrent.invoke(window);
+    public void makeContextCurrent(MemoryAddress window) {
+        try {
+            glfwMakeContextCurrent.invoke(window);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method glfw.make_context_current(&%d)",
+                    window.toRawLongValue()), th);
+        }
     }
 
-    public int windowShouldClose(MemoryAddress window) throws Throwable {
-        return (int) glfwWindowShouldClose.invoke(window);
+    public int windowShouldClose(MemoryAddress window) {
+        try {
+            return (int) glfwWindowShouldClose.invoke(window);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method glfw.window_should_close(&%d)",
+                    window.toRawLongValue()), th);
+        }
     }
 
-    public void swapBuffers(MemoryAddress window) throws Throwable {
-        glfwSwapBuffers.invoke(window);
+    public void swapBuffers(MemoryAddress window) {
+        try {
+            glfwSwapBuffers.invoke(window);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method glfw.swap_buffers(&%d)",
+                    window.toRawLongValue()), th);
+        }
     }
 
-    public void pollEvents() throws Throwable {
-        glfwPollEvents.invoke();
+    public void pollEvents() {
+        try {
+            glfwPollEvents.invoke();
+        } catch (Throwable th) {
+            throw new RuntimeException("Error invoking native method glfw.poll_events()", th);
+        }
     }
 
-    public void shutDown() throws Throwable {
-        glfwShutDown.invoke();
+    public void shutDown() {
+        try {
+            glfwShutDown.invoke();
+        } catch (Throwable th) {
+            throw new RuntimeException("Error invoking native method glfw.shut_down()", th);
+        }
     }
 }

@@ -42,8 +42,8 @@ public abstract class Application {
                     var gl = new OpenGL();
 
                     app.run(session, glfw, gl);
-                } catch (Throwable th) {
-                    throw new RuntimeException(th);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             } catch (NoSuchMethodException me) {
                 throw new RuntimeException("Error: no zero args constructor in Application class");
@@ -53,6 +53,5 @@ public abstract class Application {
         }
     }
 
-    protected abstract void run(MemorySession session, GLFW glfw, OpenGL gl) throws Throwable;
-
+    protected abstract void run(MemorySession session, GLFW glfw, OpenGL gl) throws Exception;
 }

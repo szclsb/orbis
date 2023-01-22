@@ -1,6 +1,9 @@
 package ch.szclsb.orbis.app;
 
 import ch.szclsb.orbis.Application;
+import ch.szclsb.orbis.Program;
+import ch.szclsb.orbis.Shader;
+import ch.szclsb.orbis.ShaderType;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 
@@ -16,8 +19,8 @@ public class Triangle extends Application {
     }
 
     @Override
-    public void run(MemorySession session, GLFW glfw, OpenGL gl) throws Throwable {
-        if(glfw.init() == 0) {
+    public void run(MemorySession session, GLFW glfw, OpenGL gl) throws Exception {
+        if (glfw.init() == 0) {
             return;
         }
         var titleSegment = session.allocateUtf8String("Hello World");
@@ -30,10 +33,10 @@ public class Triangle extends Application {
             return;
         }
 
-        var success = session.allocate(ValueLayout.JAVA_INT);
-        var infoLog = session.allocateArray(ValueLayout.JAVA_CHAR, 512);
-        var vertexShader = gl.createShader(GL_VERTEX_SHADER);
-        var vertexSourceSegment = session.allocateUtf8String("""
+        var program = new Program(gl);
+        try (var vertexShader = new Shader(gl, ShaderType.VERTEX);
+             var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
+            vertexShader.compile(session, """
                 #version 450 core
                                 
                 layout (location = 0) in vec3 aPos;
@@ -43,17 +46,7 @@ public class Triangle extends Application {
                     gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
                 }
                 """);
-        gl.shaderSource(vertexShader, 1, vertexSourceSegment.address(), MemoryAddress.NULL);
-        gl.compileShader(vertexShader);
-        gl.getShaderiv(vertexShader, GL_COMPILE_STATUS, success.address());
-        if (success.get(ValueLayout.JAVA_INT, 0) == GL_FALSE) {
-            gl.getShaderInfoLog(vertexShader, 512, MemoryAddress.NULL, infoLog.address());
-            System.err.printf("Failed to compile vertex shader %d: %s%n", vertexShader, infoLog.getUtf8String(0));
-            return;
-        }
-
-        var fragmentShader = gl.createShader(GL_FRAGMENT_SHADER);
-        var fragmentSourceSegment = session.allocateUtf8String("""
+            fragmentShader.compile(session, """
                 #version 450 core
                 out vec4 FragColor;
                                 
@@ -62,32 +55,15 @@ public class Triangle extends Application {
                     FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
                 }
                 """);
-        gl.shaderSource(fragmentShader, 1, fragmentSourceSegment.address(), MemoryAddress.NULL);
-        gl.compileShader(fragmentShader);
-        gl.getShaderiv(fragmentShader, GL_COMPILE_STATUS, success.address());
-        if (success.get(ValueLayout.JAVA_INT, 0) == GL_FALSE) {
-            gl.getShaderInfoLog(fragmentShader, 512, MemoryAddress.NULL, infoLog.address());
-            System.err.printf("Failed to compile fragment shader %d: %s%n", fragmentShader, infoLog.getUtf8String(0));
-            return;
-        }
-
-        var program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
-        gl.deleteShader(vertexShader);
-        gl.deleteShader(fragmentShader);
-        gl.getProgramiv(program, GL_LINK_STATUS, success.address());
-        if (success.get(ValueLayout.JAVA_INT, 0) == GL_FALSE) {
-            gl.getProgramInfoLog(program, 512, MemoryAddress.NULL, infoLog.address());
-            System.err.printf("Failed to link program %d: %s\n", program, infoLog.getUtf8String(0));
-            return;
+            program.attachShader(vertexShader);
+            program.attachShader(fragmentShader);
+            program.link(session);
         }
 
         var vertices = session.allocateArray(ValueLayout.JAVA_FLOAT,
                 -0.5f, -0.5f, 0.0f,
                 0.5f, -0.5f, 0.0f,
-                0.0f,  0.5f, 0.0f
+                0.0f, 0.5f, 0.0f
         );
 
         var arraySegment = session.allocate(ValueLayout.JAVA_INT);
@@ -107,7 +83,7 @@ public class Triangle extends Application {
         while (glfw.windowShouldClose(window) == 0) {
             gl.clear(GL_COLOR_BUFFER_BIT);
 
-            gl.useProgram(program);
+            program.use();
             gl.bindVertexArray(vao);
             gl.drawArrays(GL_TRIANGLES, 0, 3);
 

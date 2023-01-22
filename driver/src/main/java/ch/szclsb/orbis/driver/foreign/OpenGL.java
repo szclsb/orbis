@@ -855,99 +855,217 @@ public class OpenGL {
         this.glDrawElements= loadMethod("drawElements", null, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
     }
 
-    public int load() throws Throwable {
-        return (int) glLoad.invoke();
+    public int load() {
+        try {
+            return (int) glLoad.invoke();
+        } catch (Throwable th) {
+            throw new RuntimeException("Error invoking native method gl.load()", th);
+        }
     }
 
-    public int createShader(int type) throws Throwable {
-        return (int) glCreateShader.invoke(type);
+    public int createShader(int type) {
+        try {
+            return (int) glCreateShader.invokeExact(type);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.create_shader(%d)",
+                    type), th);
+        }
     }
 
-    public void shaderSource(int shader, int count, MemoryAddress source, MemoryAddress length) throws Throwable {
-        glShaderSource.invoke(shader, count, source, length);
+    public void shaderSource(int shader, int count, MemoryAddress source, MemoryAddress length) {
+        try {
+            glShaderSource.invoke(shader, count, source, length);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.shader_source(%d, %d, &%d, &%d)",
+                    shader, count, source.toRawLongValue(), length.toRawLongValue()), th);
+        }
     }
 
-    public void compileShader(int shader) throws Throwable {
-        glCompileShader.invoke(shader);
+    public void compileShader(int shader) {
+        try {
+            glCompileShader.invoke(shader);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.compile_shader(%d)",
+                    shader), th);
+        }
     }
 
-    public void getShaderiv(int shader, int pname, MemoryAddress params) throws Throwable {
-        glGetShaderiv.invoke(shader, pname, params);
+    public void getShaderiv(int shader, int pname, MemoryAddress params) {
+        try {
+            glGetShaderiv.invoke(shader, pname, params);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.get_shader_iv(%d, %d, &%d)",
+                    shader, pname, params.toRawLongValue()), th);
+        }
     }
 
-    public void getShaderInfoLog(int shader, int bufSize, MemoryAddress length, MemoryAddress infoLog) throws Throwable {
-        glGetShaderInfoLog.invoke(shader, bufSize, length, infoLog);
+    public void getShaderInfoLog(int shader, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
+        try {
+            glGetShaderInfoLog.invoke(shader, bufSize, length, infoLog);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.get_shader_info_log(%d, %d, &%d, &%d)",
+                    shader, bufSize, length.toRawLongValue(), infoLog.toRawLongValue()), th);
+        }
     }
 
-    public void deleteShader(int shader) throws Throwable {
-        glDeleteShader.invoke(shader);
+    public void deleteShader(int shader) {
+        try {
+            glDeleteShader.invoke(shader);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.delete_shader(%d)",
+                    shader), th);
+        }
     }
 
-    public int createProgram() throws Throwable {
-        return (int) glCreateProgram.invoke();
+    public int createProgram() {
+        try {
+            return (int) glCreateProgram.invoke();
+        } catch (Throwable th) {
+            throw new RuntimeException("Error invoking native method gl.create_program()", th);
+        }
     }
 
-    public void attachShader(int program, int shader) throws Throwable {
-        glAttachShader.invoke(program, shader);
+    public void attachShader(int program, int shader) {
+        try {
+            glAttachShader.invoke(program, shader);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.attach_shader(%d, %d)",
+                    program, shader), th);
+        }
     }
 
-    public void linkProgram(int program) throws Throwable {
-        glLinkProgram.invoke(program);
+    public void linkProgram(int program) {
+        try {
+            glLinkProgram.invoke(program);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.link_program(%d)",
+                    program), th);
+        }
     }
 
-    public void getProgramiv(int program, int pname, MemoryAddress params) throws Throwable {
-        glGetProgramiv.invoke(program, pname, params);
+    public void getProgramiv(int program, int pname, MemoryAddress params) {
+        try {
+            glGetProgramiv.invoke(program, pname, params);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.get_program_iv(%d, %d, &%d)",
+                    program, pname, params.toRawLongValue()), th);
+        }
     }
 
-    public void getProgramInfoLog(int program, int bufSize, MemoryAddress length, MemoryAddress infoLog) throws Throwable {
-        glGetProgramInfoLog.invoke(program, bufSize, length, infoLog);
+    public void getProgramInfoLog(int program, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
+        try {
+            glGetProgramInfoLog.invoke(program, bufSize, length, infoLog);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.get_program_info_log(%d, %d, &%d, &%d)",
+                    program, bufSize, length.toRawLongValue(), infoLog.toRawLongValue()), th);
+        }
     }
 
-    public void useProgram(int program) throws Throwable {
-        glUseProgram.invoke(program);
+    public void useProgram(int program) {
+        try {
+            glUseProgram.invoke(program);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.use_program(%d)",
+                    program), th);
+        }
     }
 
-    public void createVertexArrays(int n, MemoryAddress arrays) throws Throwable {
-        glCreateVertexArrays.invoke(n, arrays);
+    public void createVertexArrays(int n, MemoryAddress arrays) {
+        try {
+            glCreateVertexArrays.invoke(n, arrays);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.create_vertex_arrays(%d, &%d)",
+                    n, arrays.toRawLongValue()), th);
+        }
     }
 
-    public void bindVertexArray(int array) throws Throwable {
-        glBindVertexArray.invoke(array);
+    public void bindVertexArray(int array) {
+        try {
+            glBindVertexArray.invoke(array);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.bind_vertex_arrays(%d)",
+                    array), th);
+        }
     }
 
-    public void createBuffers(int n, MemoryAddress buffers) throws Throwable {
-        glCreateBuffers.invoke(n, buffers);
+    public void createBuffers(int n, MemoryAddress buffers) {
+        try {
+            glCreateBuffers.invoke(n, buffers);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.create_buffers(%d, &%d)",
+                    n, buffers.toRawLongValue()), th);
+        }
     }
 
-    public void bindBuffer(int target, int buffer) throws Throwable {
-        glBindBuffer.invoke(target, buffer);
+    public void bindBuffer(int target, int buffer) {
+        try {
+            glBindBuffer.invoke(target, buffer);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.bind_buffers(%d, %d)",
+                    target, buffer), th);
+        }
     }
 
-    public void bufferData(int target, long size, MemoryAddress data, int usage) throws Throwable {
-        glBufferData.invoke(target, size, data, usage);
+    public void bufferData(int target, long size, MemoryAddress data, int usage) {
+        try {
+            glBufferData.invoke(target, size, data, usage);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.buffer_data(%d, %d, &%d, %d)",
+                    target, size, data.toRawLongValue(), usage), th);
+        }
     }
 
-    public void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) throws Throwable {
-        glVertexAttribPointer.invoke(index, size, type, normalized, stride, pointer);
+    public void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) {
+        try {
+            glVertexAttribPointer.invoke(index, size, type, normalized, stride, pointer);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.vertex_attrib_pointer(%d, %d, %d, %d, %d, &%d)",
+                    index, size, type, normalized, stride, pointer.toRawLongValue()), th);
+        }
     }
 
-    public void disableVertexAttribArray(int index) throws Throwable {
-        glDisableVertexAttribArray.invoke(index);
+    public void disableVertexAttribArray(int index) {
+        try {
+            glDisableVertexAttribArray.invoke(index);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.disable_vertex_attrib_array(%d)",
+                    index), th);
+        }
     }
 
-    public void enableVertexAttribArray(int index) throws Throwable {
-        glEnableVertexAttribArray.invoke(index);
+    public void enableVertexAttribArray(int index) {
+        try {
+            glEnableVertexAttribArray.invoke(index);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.enable_vertex_attrib_array(%d)",
+                    index), th);
+        }
     }
 
-    public void clear(int mask) throws Throwable {
-        glClear.invoke(mask);
+    public void clear(int mask) {
+        try {
+            glClear.invoke(mask);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.clear(%d)",
+                    mask), th);
+        }
     }
 
-    public void drawArrays(int mode, int first, int count) throws Throwable {
-        glDrawArrays.invoke(mode, first, count);
+    public void drawArrays(int mode, int first, int count) {
+        try {
+            glDrawArrays.invoke(mode, first, count);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.draw_arrays(%d, %d, %d)",
+                    mode, first, count), th);
+        }
     }
 
-    public void drawElements(int mode, int count, int type, MemoryAddress indices) throws Throwable {
-        glDrawElements.invoke(mode, count, type, indices);
+    public void drawElements(int mode, int count, int type, MemoryAddress indices) {
+        try {
+            glDrawElements.invoke(mode, count, type, indices);
+        } catch (Throwable th) {
+            throw new RuntimeException(String.format("Error invoking native method gl.draw_elements(%d, %d, %d, &%d)",
+                    mode, count, type, indices.toRawLongValue()), th);
+        }
     }
 }
