@@ -16,7 +16,7 @@ public class Introspector {
 //        System.loadLibrary("opengl32");
 //        loadProvidedLibrary("glew32.dll");
 //        loadProvidedLibrary( "glfw3.dll");
-        loadProvidedLibrary( "orbis.dll");
+        loadProvidedLibrary( "orbis_native_graphic.dll");
     }
 
     private static void loadProvidedLibrary(String name) {

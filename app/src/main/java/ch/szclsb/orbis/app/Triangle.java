@@ -1,7 +1,7 @@
 package ch.szclsb.orbis.app;
 
+import ch.szclsb.orbis.Application;
 import ch.szclsb.orbis.driver.foreign.GLFW;
-import ch.szclsb.orbis.driver.foreign.Introspector;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 
 import java.lang.foreign.MemoryAddress;
@@ -10,19 +10,13 @@ import java.lang.foreign.ValueLayout;
 
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
 
-public class Triangle {
+public class Triangle extends Application {
     public static void main(String[] args) {
-        Introspector.loadLibraries();
-        try(var session = MemorySession.openShared()) {
-            var glfw = new GLFW();
-            var gl = new OpenGL();
-            run(session, glfw, gl);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        launch(args);
     }
 
-    public static void run(MemorySession session, GLFW glfw, OpenGL gl) throws Throwable {
+    @Override
+    public void run(MemorySession session, GLFW glfw, OpenGL gl) throws Throwable {
         if(glfw.init() == 0) {
             return;
         }

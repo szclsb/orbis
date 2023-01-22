@@ -11,20 +11,19 @@ repositories {
 
 dependencies {
     implementation project(':driver')
-    implementation project(':framework')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
-
-test {
-    useJUnitPlatform()
-    jvmArgs("--enable-preview --enable-native-access=ch.szclsb.orbis.driver")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(19)
     }
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs("--enable-preview --enable-native-access=ch.szclsb.orbis.driver")
 }
 
 tasks.withType(JavaCompile) {
