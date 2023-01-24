@@ -18,19 +18,19 @@ public class Program {
         this.id = gl.createProgram();
     }
 
-    public int getId() {
-        return id;
+    public int id() {
+        return this.id;
     }
 
     public void attachShader(Shader shader) {
-        gl.attachShader(id, shader.getId());
+        gl.attachShader(id, shader.id());
     }
 
     public void link(ForeignInt success, ForeignCharArray infoLog) throws LinkException {
         gl.linkProgram(id);
-        gl.getProgramiv(id, GL_LINK_STATUS, success.getAddress());
+        gl.getProgramiv(id, GL_LINK_STATUS, success.address());
         if (success.get() == GL_FALSE) {
-            gl.getProgramInfoLog(id, infoLog.getSize(), MemoryAddress.NULL, infoLog.getAddress());
+            gl.getProgramInfoLog(id, infoLog.count(), MemoryAddress.NULL, infoLog.address());
             throw new LinkException(id, infoLog.getString());
         }
     }

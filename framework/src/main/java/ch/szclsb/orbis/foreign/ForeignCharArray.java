@@ -12,12 +12,16 @@ public class ForeignCharArray implements IAddressable {
         this.segment = session.allocateArray(ValueLayout.JAVA_CHAR, size);
     }
 
-    public MemoryAddress getAddress() {
+    public MemoryAddress address() {
         return segment.address();
     }
 
-    public int getSize() {
-        return (int) (segment.byteSize() / 32);
+    public int count() {
+        return (int) (segment.byteSize() / 4);
+    }
+
+    public long byteSize() {
+        return segment.byteSize();
     }
 
     public char get(int index) {

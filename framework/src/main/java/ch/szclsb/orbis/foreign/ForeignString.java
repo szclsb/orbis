@@ -20,7 +20,7 @@ public class ForeignString implements IAddressable {
     }
 
     @Override
-    public MemoryAddress getAddress() {
+    public MemoryAddress address() {
         return segment.address();
     }
 

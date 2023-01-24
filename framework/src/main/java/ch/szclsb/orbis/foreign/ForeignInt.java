@@ -18,7 +18,7 @@ public class ForeignInt implements IAddressable {
     }
 
     @Override
-    public MemoryAddress getAddress() {
+    public MemoryAddress address() {
         return segment.address();
     }
 

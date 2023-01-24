@@ -11,7 +11,7 @@ public class Window {
 
     public Window(GLFW glfw, int width, int height, ForeignString title) throws WindowException {
         this.glfw = glfw;
-        this.address = glfw.createWindow(width, height, title.getAddress(), MemoryAddress.NULL, MemoryAddress.NULL);
+        this.address = glfw.createWindow(width, height, title.address(), MemoryAddress.NULL, MemoryAddress.NULL);
         if (address == MemoryAddress.NULL) {
             throw new WindowException();
         }

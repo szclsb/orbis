@@ -3,19 +3,11 @@ package ch.szclsb.orbis.app;
 import ch.szclsb.orbis.*;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
-import ch.szclsb.orbis.foreign.ForeignCharArray;
-import ch.szclsb.orbis.foreign.ForeignInt;
-import ch.szclsb.orbis.foreign.ForeignString;
+import ch.szclsb.orbis.foreign.*;
 
-import java.io.*;
 import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
 import java.lang.foreign.ValueLayout;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
 
@@ -51,31 +43,30 @@ public class Triangle extends Application {
             program.link(success, infoLog);
         }
 
-        var vertices = session.allocateArray(ValueLayout.JAVA_FLOAT,
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f, 0.5f, 0.0f
-        );
+        VertexArray vao;
+        ArrayBuffer vbo;
+        try (var bufferSession = MemorySession.openConfined()) {
+            var arraySegment = new ForeignIntArray(bufferSession, 1);
+            var vertices = new ForeignFloatArray(bufferSession,
+                    -0.5f, -0.5f, 0.0f,
+                    0.5f, -0.5f, 0.0f,
+                    0.0f, 0.5f, 0.0f
+            );
 
-        var arraySegment = session.allocate(ValueLayout.JAVA_INT);
-        gl.createVertexArrays(1, arraySegment.address());
-        var vao = arraySegment.get(ValueLayout.JAVA_INT, 0);
-        gl.bindVertexArray(vao);
-
-        var bufferSegment = session.allocate(ValueLayout.JAVA_INT);
-        gl.createBuffers(1, bufferSegment.address());
-        var vbo = bufferSegment.get(ValueLayout.JAVA_INT, 0);
-        gl.bindBuffer(GL_ARRAY_BUFFER, vbo);
-        gl.bufferData(GL_ARRAY_BUFFER, vertices.byteSize(), vertices.address(), GL_STATIC_DRAW);
-        gl.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * 4, MemoryAddress.NULL);  // stride: sizeof(float) = 4
-        gl.enableVertexAttribArray(0);
+            vao = VertexArray.create(gl, arraySegment).findFirst().orElseThrow();
+            vao.bind();
+            vbo = ArrayBuffer.create(gl, arraySegment).findFirst().orElseThrow();
+            vbo.bind();
+            vbo.init(ValueType.FLOAT, 3, false);
+            vbo.setData(vertices, DrawingMode.STATIC_DRAW);
+        }
 
         // render loop
         while (!window.shouldClose()) {
             gl.clear(GL_COLOR_BUFFER_BIT);
 
             program.use();
-            gl.bindVertexArray(vao);
+            vao.bind();
             gl.drawArrays(GL_TRIANGLES, 0, 3);
 
             window.swapBuffer();
