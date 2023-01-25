@@ -21,4 +21,6 @@ public enum ValueType {
     public int byteSize() {
         return this.byteSize;
     }
+
+
 }

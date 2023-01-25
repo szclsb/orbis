@@ -11,12 +11,14 @@ import java.util.stream.Stream;
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
 import static ch.szclsb.orbis.driver.foreign.OpenGL.GL_FALSE;
 
-public class ArrayBuffer {
+public class VertexBufferObject {
     private final OpenGL gl;
+    private final VertexLayout layout;
     private final int id;
 
-    private ArrayBuffer(OpenGL gl, int id) {
+    private VertexBufferObject(OpenGL gl, VertexLayout layout, int id) {
         this.gl = gl;
+        this.layout = layout;
         this.id = id;
     }
 
@@ -28,18 +30,23 @@ public class ArrayBuffer {
         gl.bindBuffer(GL_ARRAY_BUFFER, id);
     }
 
-    public void init(ValueType type, int vertexSize, boolean normalized) {
-        gl.vertexAttribPointer(0, vertexSize, type.id(), normalized ? GL_TRUE : GL_FALSE,
-                vertexSize * type.byteSize(), MemoryAddress.NULL);
-        gl.enableVertexAttribArray(0);
+    public void init(boolean normalized, Object format) {
+        // todo vertex format: const, interleaved
+        var i = 0;
+        var it = layout.attributeStream().iterator();
+        while (it.hasNext()) {
+            var va = it.next();
+            gl.vertexAttribPointer(i++, va.count(), va.type().id(), normalized ? GL_TRUE : GL_FALSE,
+                    va.count() * va.type().byteSize(), MemoryAddress.NULL);
+        }
     }
 
     public void setData(ForeignFloatArray vertices, DrawingMode mode) {
         gl.bufferData(GL_ARRAY_BUFFER, vertices.byteSize(), vertices.address(), mode.id());
     }
 
-    public static Stream<ArrayBuffer> create(OpenGL gl, ForeignIntArray array) {
+    public static Stream<VertexBufferObject> create(OpenGL gl, VertexLayout layout, ForeignIntArray array) {
         gl.createBuffers(array.count(), array.address());
-        return Arrays.stream(array.toArray()).mapToObj(id -> new ArrayBuffer(gl, id));
+        return Arrays.stream(array.toArray()).mapToObj(id -> new VertexBufferObject(gl, layout, id));
     }
 }

@@ -1,10 +1,7 @@
 package ch.szclsb.orbis.app;
 
 import ch.szclsb.orbis.*;
-import ch.szclsb.orbis.buffer.ArrayBuffer;
-import ch.szclsb.orbis.buffer.DrawingMode;
-import ch.szclsb.orbis.buffer.ValueType;
-import ch.szclsb.orbis.buffer.VertexArray;
+import ch.szclsb.orbis.buffer.*;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 import ch.szclsb.orbis.foreign.*;
@@ -49,8 +46,11 @@ public class Triangle extends Application {
             program.link(success, infoLog);
         }
 
-        VertexArray vao;
-        ArrayBuffer vbo;
+        program.use();
+
+        var vertexLayout = new VertexLayout(new VertexAttribute(ValueType.FLOAT, 3));
+        VertexArrayObject vao;
+        VertexBufferObject vbo;
         try (var bufferSession = MemorySession.openConfined()) {
             var arraySegment = new ForeignIntArray(bufferSession, 1);
             var vertices = new ForeignFloatArray(bufferSession,
@@ -59,11 +59,12 @@ public class Triangle extends Application {
                     0.0f, 0.5f, 0.0f
             );
 
-            vao = VertexArray.create(gl, arraySegment).findFirst().orElseThrow();
+            vao = VertexArrayObject.create(gl, vertexLayout, arraySegment).findFirst().orElseThrow();
             vao.bind();
-            vbo = ArrayBuffer.create(gl, arraySegment).findFirst().orElseThrow();
+            vao.enableAllAttribute();
+            vbo = VertexBufferObject.create(gl, vertexLayout, arraySegment).findFirst().orElseThrow();
             vbo.bind();
-            vbo.init(ValueType.FLOAT, 3, false);
+            vbo.init(false, null);
             vbo.setData(vertices, DrawingMode.STATIC_DRAW);
         }
 
@@ -71,8 +72,8 @@ public class Triangle extends Application {
         while (!window.shouldClose()) {
             gl.clear(GL_COLOR_BUFFER_BIT);
 
-            program.use();
-            vao.bind();
+//            program.use();
+//            vao.bind();
             gl.drawArrays(GL_TRIANGLES, 0, 3);
 
             window.swapBuffer();
