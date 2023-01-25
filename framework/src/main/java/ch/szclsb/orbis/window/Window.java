@@ -1,4 +1,4 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.window;
 
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.foreign.ForeignString;

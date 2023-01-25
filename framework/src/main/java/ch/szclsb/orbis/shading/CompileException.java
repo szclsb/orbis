@@ -1,4 +1,4 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.shading;
 
 public class CompileException extends Exception {
     private final int shader;

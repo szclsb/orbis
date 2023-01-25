@@ -1,4 +1,4 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.shading;
 
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 

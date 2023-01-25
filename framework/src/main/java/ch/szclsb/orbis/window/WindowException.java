@@ -1,4 +1,4 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.window;
 
 public class WindowException extends Exception {
     public WindowException() {

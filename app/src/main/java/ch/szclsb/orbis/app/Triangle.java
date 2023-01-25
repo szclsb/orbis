@@ -1,13 +1,19 @@
 package ch.szclsb.orbis.app;
 
 import ch.szclsb.orbis.*;
+import ch.szclsb.orbis.buffer.ArrayBuffer;
+import ch.szclsb.orbis.buffer.DrawingMode;
+import ch.szclsb.orbis.buffer.ValueType;
+import ch.szclsb.orbis.buffer.VertexArray;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
 import ch.szclsb.orbis.foreign.*;
+import ch.szclsb.orbis.shading.Program;
+import ch.szclsb.orbis.shading.Shader;
+import ch.szclsb.orbis.shading.ShaderType;
+import ch.szclsb.orbis.window.Window;
 
-import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
-import java.lang.foreign.ValueLayout;
 
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
 
@@ -30,8 +36,8 @@ public class Triangle extends Application {
 
         var program = new Program(gl);
         try (var shaderSession = MemorySession.openConfined();
-            var vertexShader = new Shader(gl, ShaderType.VERTEX);
-            var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
+             var vertexShader = new Shader(gl, ShaderType.VERTEX);
+             var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
             var success = new ForeignInt(shaderSession);
             var infoLog = new ForeignCharArray(shaderSession, 512);
             var vertexSource = new ForeignString(shaderSession, readResource("vertex_shader.glsl"));

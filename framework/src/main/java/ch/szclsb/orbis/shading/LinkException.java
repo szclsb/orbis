@@ -1,4 +1,4 @@
-package ch.szclsb.orbis;
+package ch.szclsb.orbis.shading;
 
 public class LinkException extends Exception {
     private final int program;
