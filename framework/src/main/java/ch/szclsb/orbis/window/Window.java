@@ -1,5 +1,6 @@
 package ch.szclsb.orbis.window;
 
+import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.foreign.ForeignString;
 
 import java.lang.foreign.MemoryAddress;
@@ -16,8 +17,8 @@ public class Window {
         }
     }
 
-    public void makeCurrent() {
-        makeContextCurrent(address);
+    public void makeContextCurrent() {
+        GLFW.makeContextCurrent(address);
     }
 
     public boolean shouldClose() {

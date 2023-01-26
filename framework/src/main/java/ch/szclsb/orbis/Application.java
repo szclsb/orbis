@@ -66,21 +66,19 @@ public abstract class Application {
         }
     }
 
-    protected Window openWindow(int width, int height, String title) throws WindowException {
-        if (GLFW.init() == 0) {
-            throw new RuntimeException("Unable to initialize GLFW");
-        }
-        Window window;
-        try(var windowSession = MemorySession.openConfined()) {
-            var titleSegment = new ForeignString(windowSession, title);
-            window = new Window(width, height, titleSegment);
-        }
-        window.makeCurrent();
-        if (OpenGL.load() == 0) {
-            throw new RuntimeException("Unable to initialize OpenGL");
-        }
-        return window;
-    }
+//    protected Window openWindow(int width, int height, String title) throws WindowException {
+//        if (GLFW.init() == 0) {
+//            throw new RuntimeException("Unable to initialize GLFW");
+//        }
+//        Window window;
+//        try(var windowSession = MemorySession.openConfined()) {
+//            var titleSegment = new ForeignString(windowSession, title);
+//            window = new Window(width, height, titleSegment);
+//        }
+//        window.makeCurrent();
+//
+//        return window;
+//    }
 
     protected abstract void run() throws Exception;
 }
