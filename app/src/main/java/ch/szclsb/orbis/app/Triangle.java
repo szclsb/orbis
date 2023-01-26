@@ -10,6 +10,7 @@ import ch.szclsb.orbis.shading.Shader;
 import ch.szclsb.orbis.shading.ShaderType;
 import ch.szclsb.orbis.window.Window;
 
+import java.lang.foreign.MemoryAddress;
 import java.lang.foreign.MemorySession;
 
 import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
@@ -21,14 +22,15 @@ public class Triangle extends Application {
 
     @Override
     public void run() throws Exception {
-        try(var session = DriverSession.open()) {
+        try (var driverSession = DriverSession.open();
+             var memSession = MemorySession.openShared()) {
             Window window;
-            try(var windowMemSession = MemorySession.openConfined()) {
+            try (var windowMemSession = MemorySession.openConfined()) {
                 var titleSegment = new ForeignString(windowMemSession, "title");
                 window = new Window(720, 480, titleSegment);
             }
             window.makeContextCurrent();
-            session.initOpenGL();  // init OpenGL after any? window has context
+            driverSession.initOpenGL();  // init OpenGL after any? window has context
 
             var program = new Program();
             try (var shaderMemSession = MemorySession.openConfined();
@@ -49,32 +51,44 @@ public class Triangle extends Application {
 
 //        var vertexLayout = new VertexLayout(new VertexAttribute(ValueType.FLOAT, 3));
             VertexArrayObject vao;
-            VertexBufferObject vbo;
             try (var bufferMemSession = MemorySession.openConfined()) {
                 var oneArraySeg = new ForeignIntArray(bufferMemSession, 1);
                 var vertices = new ForeignFloatArray(bufferMemSession,
-                        -0.5f, -0.5f, 0.0f,
-                        0.5f, -0.5f, 0.0f,
-                        0.0f, 0.5f, 0.0f
+                        0.5f, 0.5f, 0.0f,  // top right
+                        0.5f, -0.5f, 0.0f,  // bottom right
+                        -0.5f, -0.5f, 0.0f,  // bottom left
+                        -0.5f, 0.5f, 0.0f   // top left
+                );
+                // should be unsigned int?
+                var indices = new ForeignIntArray(bufferMemSession,
+                        0, 1, 3,   // first triangle
+                        1, 2, 3    // second triangle
                 );
 
                 vao = VertexArrayObject.create(oneArraySeg).findFirst().orElseThrow();
                 vao.bind();
-                vao.enableAttribute(0);  // attribute are disabled by default, this enables pos (location = 0) in vertex shader
 
-                vbo = VertexBufferObject.create(oneArraySeg).findFirst().orElseThrow();
+                var vbo = VertexBufferObject.create(oneArraySeg).findFirst().orElseThrow();
                 vbo.bind();
-                vbo.init(0, 3, ValueType.FLOAT, false);  // vao and vbo must be bound, attribute dont need to be enabled. This defines pos (location = 0) in vertex shader
                 vbo.setData(vertices, DrawingMode.STATIC_DRAW);               // set pos vertex in vbo for vertex shader
+
+                var ebo = ElementBufferObject.create(oneArraySeg).findFirst().orElseThrow();
+                ebo.bind();
+                ebo.setData(indices, DrawingMode.STATIC_DRAW);
+
+                vbo.init(0, 3, ValueType.FLOAT, false);  // vao and vbo must be bound, attribute dont need to be enabled. This defines pos (location = 0) in vertex shader
+                vao.enableAttribute(0);  // attribute are disabled by default, this enables pos (location = 0) in vertex shader
             }
 
             // render loop
             while (!window.shouldClose()) {
                 OpenGL.clear(GL_COLOR_BUFFER_BIT);
 
-//            program.use();
-//            vao.bind();
-                OpenGL.drawArrays(GL_TRIANGLES, 0, 3);
+//              program.use();
+                vao.bind();
+//                OpenGL.drawArrays(GL_TRIANGLES, 0, 3);
+                OpenGL.drawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, MemoryAddress.NULL);
+                OpenGL.bindVertexArray(0);
 
                 window.swapBuffer();
                 GLFW.pollEvents();
