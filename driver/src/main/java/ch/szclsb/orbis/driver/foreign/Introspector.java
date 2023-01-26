@@ -4,7 +4,9 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.nio.file.Path;
 
-public class Introspector {
+public final class Introspector {
+    private Introspector() {}
+
     private static final Path LIB_DIR = Path.of(System.getProperty("user.dir"), "driver");
     private static final Linker LINKER = Linker.nativeLinker();
     private static final SymbolLookup LOADER = SymbolLookup.loaderLookup();

@@ -7,26 +7,18 @@ import static ch.szclsb.orbis.driver.foreign.Introspector.loadMethod;
 import static java.lang.foreign.ValueLayout.ADDRESS;
 import static java.lang.foreign.ValueLayout.JAVA_INT;
 
-public class GLFW {
-    private final MethodHandle glfwInit;
-    private final MethodHandle glfwCreateWindow;
-    private final MethodHandle glfwMakeContextCurrent;
-    private final MethodHandle glfwWindowShouldClose;
-    private final MethodHandle glfwSwapBuffers;
-    private final MethodHandle glfwPollEvents;
-    private final MethodHandle glfwShutDown;
+public final class GLFW {
+    private GLFW() {}
 
-    public GLFW() {
-        this.glfwInit = loadMethod("init", JAVA_INT);
-        this.glfwCreateWindow = loadMethod("createWindow", ADDRESS, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS, ADDRESS);
-        this.glfwMakeContextCurrent = loadMethod("makeContextCurrent", null, ADDRESS);
-        this.glfwWindowShouldClose = loadMethod("windowShouldClose", JAVA_INT, ADDRESS);
-        this.glfwSwapBuffers = loadMethod("swapBuffers", null, ADDRESS);
-        this.glfwPollEvents = loadMethod("pollEvents", null);
-        this.glfwShutDown = loadMethod("shutDown", null);
-    }
+    private static final MethodHandle glfwInit = loadMethod("init", JAVA_INT);
+    private static final MethodHandle glfwCreateWindow = loadMethod("createWindow", ADDRESS, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS, ADDRESS);
+    private static final MethodHandle glfwMakeContextCurrent = loadMethod("makeContextCurrent", null, ADDRESS);
+    private static final MethodHandle glfwWindowShouldClose = loadMethod("windowShouldClose", JAVA_INT, ADDRESS);
+    private static final MethodHandle glfwSwapBuffers = loadMethod("swapBuffers", null, ADDRESS);
+    private static final MethodHandle glfwPollEvents = loadMethod("pollEvents", null);
+    private static final MethodHandle glfwShutDown = loadMethod("shutDown", null);
 
-    public int init() {
+    public static int init() {
         try {
             return (int) glfwInit.invoke();
         } catch (Throwable th) {
@@ -34,7 +26,7 @@ public class GLFW {
         }
     }
 
-    public MemoryAddress createWindow(int width, int height, MemoryAddress title, MemoryAddress monitor, MemoryAddress share) {
+    public static MemoryAddress createWindow(int width, int height, MemoryAddress title, MemoryAddress monitor, MemoryAddress share) {
         try {
             return (MemoryAddress) glfwCreateWindow.invoke(width, height, title, monitor, share);
         } catch (Throwable th) {
@@ -43,7 +35,7 @@ public class GLFW {
         }
     }
 
-    public void makeContextCurrent(MemoryAddress window) {
+    public static void makeContextCurrent(MemoryAddress window) {
         try {
             glfwMakeContextCurrent.invoke(window);
         } catch (Throwable th) {
@@ -52,7 +44,7 @@ public class GLFW {
         }
     }
 
-    public int windowShouldClose(MemoryAddress window) {
+    public static int windowShouldClose(MemoryAddress window) {
         try {
             return (int) glfwWindowShouldClose.invoke(window);
         } catch (Throwable th) {
@@ -61,7 +53,7 @@ public class GLFW {
         }
     }
 
-    public void swapBuffers(MemoryAddress window) {
+    public static void swapBuffers(MemoryAddress window) {
         try {
             glfwSwapBuffers.invoke(window);
         } catch (Throwable th) {
@@ -70,7 +62,7 @@ public class GLFW {
         }
     }
 
-    public void pollEvents() {
+    public static void pollEvents() {
         try {
             glfwPollEvents.invoke();
         } catch (Throwable th) {
@@ -78,7 +70,7 @@ public class GLFW {
         }
     }
 
-    public void shutDown() {
+    public static void shutDown() {
         try {
             glfwShutDown.invoke();
         } catch (Throwable th) {

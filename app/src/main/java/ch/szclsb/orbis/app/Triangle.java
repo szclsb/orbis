@@ -8,7 +8,6 @@ import ch.szclsb.orbis.foreign.*;
 import ch.szclsb.orbis.shading.Program;
 import ch.szclsb.orbis.shading.Shader;
 import ch.szclsb.orbis.shading.ShaderType;
-import ch.szclsb.orbis.window.Window;
 
 import java.lang.foreign.MemorySession;
 
@@ -20,21 +19,13 @@ public class Triangle extends Application {
     }
 
     @Override
-    public void run(MemorySession session, GLFW glfw, OpenGL gl) throws Exception {
-        if (glfw.init() == 0) {
-            return;
-        }
-        var titleSegment = new ForeignString(session, "Hello World");
-        var window = new Window(glfw, 640, 480, titleSegment);
-        window.makeCurrent();
-        if (gl.load() == 0) {
-            return;
-        }
+    public void run() throws Exception {
+        var window = openWindow(640, 480, "Hello Triangle");
 
-        var program = new Program(gl);
+        var program = new Program();
         try (var shaderSession = MemorySession.openConfined();
-             var vertexShader = new Shader(gl, ShaderType.VERTEX);
-             var fragmentShader = new Shader(gl, ShaderType.FRAGMENT)) {
+             var vertexShader = new Shader(ShaderType.VERTEX);
+             var fragmentShader = new Shader(ShaderType.FRAGMENT)) {
             var success = new ForeignInt(shaderSession);
             var infoLog = new ForeignCharArray(shaderSession, 512);
             var vertexSource = new ForeignString(shaderSession, readResource("vertex_shader.glsl"));
@@ -48,38 +39,39 @@ public class Triangle extends Application {
 
         program.use();
 
-        var vertexLayout = new VertexLayout(new VertexAttribute(ValueType.FLOAT, 3));
+//        var vertexLayout = new VertexLayout(new VertexAttribute(ValueType.FLOAT, 3));
         VertexArrayObject vao;
         VertexBufferObject vbo;
         try (var bufferSession = MemorySession.openConfined()) {
-            var arraySegment = new ForeignIntArray(bufferSession, 1);
+            var oneArraySeg = new ForeignIntArray(bufferSession, 1);
             var vertices = new ForeignFloatArray(bufferSession,
                     -0.5f, -0.5f, 0.0f,
                     0.5f, -0.5f, 0.0f,
                     0.0f, 0.5f, 0.0f
             );
 
-            vao = VertexArrayObject.create(gl, vertexLayout, arraySegment).findFirst().orElseThrow();
+            vao = VertexArrayObject.create(oneArraySeg).findFirst().orElseThrow();
             vao.bind();
-            vao.enableAllAttribute();
-            vbo = VertexBufferObject.create(gl, vertexLayout, arraySegment).findFirst().orElseThrow();
+            vao.enableAttribute(0);  // attribute are disabled by default, this enables pos (location = 0) in vertex shader
+
+            vbo = VertexBufferObject.create(oneArraySeg).findFirst().orElseThrow();
             vbo.bind();
-            vbo.init(false, null);
-            vbo.setData(vertices, DrawingMode.STATIC_DRAW);
+            vbo.init(0, 3, ValueType.FLOAT, false);  // vao and vbo must be bound, attribute dont need to be enabled. This defines pos (location = 0) in vertex shader
+            vbo.setData(vertices, DrawingMode.STATIC_DRAW);               // set pos vertex in vbo for vertex shader
         }
 
         // render loop
         while (!window.shouldClose()) {
-            gl.clear(GL_COLOR_BUFFER_BIT);
+            OpenGL.clear(GL_COLOR_BUFFER_BIT);
 
 //            program.use();
 //            vao.bind();
-            gl.drawArrays(GL_TRIANGLES, 0, 3);
+            OpenGL.drawArrays(GL_TRIANGLES, 0, 3);
 
             window.swapBuffer();
-            glfw.pollEvents();
+            GLFW.pollEvents();
         }
 
-        glfw.shutDown();
+        GLFW.shutDown();
     }
 }

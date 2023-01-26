@@ -6,7 +6,9 @@ import java.lang.invoke.MethodHandle;
 import static ch.szclsb.orbis.driver.foreign.Introspector.loadMethod;
 import static java.lang.foreign.ValueLayout.*;
 
-public class OpenGL {
+public final class OpenGL {
+    private OpenGL() {}
+
     public static final int GL_FALSE = 0;
     public static final int GL_TRUE = 1;
 
@@ -797,65 +799,35 @@ public class OpenGL {
     public static final int GL_STENCIL_BACK_WRITEMASK       = 0x8CA5;
 
 
-    private final MethodHandle glLoad;
-    private final MethodHandle glCreateShader;
-    private final MethodHandle glShaderSource;
-    private final MethodHandle glCompileShader;
-    private final MethodHandle glGetShaderiv;
-    private final MethodHandle glGetShaderInfoLog;
-    private final MethodHandle glDeleteShader;
+    private static final MethodHandle glLoad = loadMethod("load", JAVA_INT);
+    private static final MethodHandle glCreateShader = loadMethod("createShader", JAVA_INT, JAVA_INT);
+    private static final MethodHandle glShaderSource = loadMethod("shaderSource", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+    private static final MethodHandle glCompileShader = loadMethod("compileShader", null, JAVA_INT);
+    private static final MethodHandle glGetShaderiv = loadMethod("getShaderiv", null, JAVA_INT, JAVA_INT, ADDRESS);
+    private static final MethodHandle glGetShaderInfoLog = loadMethod("getShaderInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+    private static final MethodHandle glDeleteShader = loadMethod("deleteShader", null, JAVA_INT);
 
-    private final MethodHandle glCreateProgram;
-    private final MethodHandle glAttachShader;
-    private final MethodHandle glLinkProgram;
-    private final MethodHandle glGetProgramiv;
-    private final MethodHandle glGetProgramInfoLog;
-    private final MethodHandle glUseProgram;
+    private static final MethodHandle glCreateProgram = loadMethod("createProgram", JAVA_INT);
+    private static final MethodHandle glAttachShader = loadMethod("attachShader", null, JAVA_INT, JAVA_INT);
+    private static final MethodHandle glLinkProgram = loadMethod("linkProgram", null, JAVA_INT);
+    private static final MethodHandle glGetProgramiv = loadMethod("getProgramiv", null, JAVA_INT, JAVA_INT, ADDRESS);
+    private static final MethodHandle glGetProgramInfoLog = loadMethod("getProgramInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
+    private static final MethodHandle glUseProgram = loadMethod("useProgram", null, JAVA_INT);
 
-    private final MethodHandle glCreateVertexArrays;
-    private final MethodHandle glBindVertexArray;
-    private final MethodHandle glCreateBuffers;
-    private final MethodHandle glBindBuffer;
-    private final MethodHandle glBufferData;
-    private final MethodHandle glVertexAttribPointer;
-    private final MethodHandle glDisableVertexAttribArray;
-    private final MethodHandle glEnableVertexAttribArray;
+    private static final MethodHandle glCreateVertexArrays = loadMethod("createVertexArrays", null, JAVA_INT, ADDRESS);
+    private static final MethodHandle glBindVertexArray = loadMethod("bindVertexArray", null, JAVA_INT);
+    private static final MethodHandle glCreateBuffers = loadMethod("createBuffers", null, JAVA_INT, ADDRESS);
+    private static final MethodHandle glBindBuffer = loadMethod("bindBuffer", null, JAVA_INT, JAVA_INT);
+    private static final MethodHandle glBufferData = loadMethod("bufferData", null, JAVA_INT, JAVA_LONG, ADDRESS, JAVA_INT);
+    private static final MethodHandle glVertexAttribPointer = loadMethod("vertexAttribPointer", null, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
+    private static final MethodHandle glDisableVertexAttribArray = loadMethod("disableVertexAttribArray", null, JAVA_INT);
+    private static final MethodHandle glEnableVertexAttribArray = loadMethod("enableVertexAttribArray", null, JAVA_INT);
 
-    private final MethodHandle glClear;
-    private final MethodHandle glDrawArrays;
-    private final MethodHandle glDrawElements;
+    private static final MethodHandle glClear = loadMethod("clear", null, JAVA_INT);
+    private static final MethodHandle glDrawArrays = loadMethod("drawArrays", null, JAVA_INT, JAVA_INT, JAVA_INT);
+    private static final MethodHandle glDrawElements = loadMethod("drawElements", null, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
 
-    public OpenGL() {
-        this.glLoad = loadMethod("load", JAVA_INT);
-        this.glCreateShader = loadMethod("createShader", JAVA_INT, JAVA_INT);
-        this.glShaderSource = loadMethod("shaderSource", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glCompileShader = loadMethod("compileShader", null, JAVA_INT);
-        this.glGetShaderiv = loadMethod("getShaderiv", null, JAVA_INT, JAVA_INT, ADDRESS);
-        this.glGetShaderInfoLog = loadMethod("getShaderInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glDeleteShader = loadMethod("deleteShader", null, JAVA_INT);
-
-        this.glCreateProgram = loadMethod("createProgram", JAVA_INT);
-        this.glAttachShader = loadMethod("attachShader", null, JAVA_INT, JAVA_INT);
-        this.glLinkProgram = loadMethod("linkProgram", null, JAVA_INT);
-        this.glGetProgramiv = loadMethod("getProgramiv", null, JAVA_INT, JAVA_INT, ADDRESS);
-        this.glGetProgramInfoLog = loadMethod("getProgramInfoLog", null, JAVA_INT, JAVA_INT, ADDRESS, ADDRESS);
-        this.glUseProgram = loadMethod("useProgram", null, JAVA_INT);
-
-        this.glCreateVertexArrays = loadMethod("createVertexArrays", null, JAVA_INT, ADDRESS);
-        this.glBindVertexArray = loadMethod("bindVertexArray", null, JAVA_INT);
-        this.glCreateBuffers = loadMethod("createBuffers", null, JAVA_INT, ADDRESS);
-        this.glBindBuffer = loadMethod("bindBuffer", null, JAVA_INT, JAVA_INT);
-        this.glBufferData = loadMethod("bufferData", null, JAVA_INT, JAVA_LONG, ADDRESS, JAVA_INT);
-        this.glVertexAttribPointer = loadMethod("vertexAttribPointer", null, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
-        this.glDisableVertexAttribArray = loadMethod("disableVertexAttribArray", null, JAVA_INT);
-        this.glEnableVertexAttribArray = loadMethod("enableVertexAttribArray", null, JAVA_INT);
-
-        this.glClear = loadMethod("clear", null, JAVA_INT);
-        this.glDrawArrays = loadMethod("drawArrays", null, JAVA_INT, JAVA_INT, JAVA_INT);
-        this.glDrawElements= loadMethod("drawElements", null, JAVA_INT, JAVA_INT, JAVA_INT, ADDRESS);
-    }
-
-    public int load() {
+    public static int load() {
         try {
             return (int) glLoad.invoke();
         } catch (Throwable th) {
@@ -863,7 +835,7 @@ public class OpenGL {
         }
     }
 
-    public int createShader(int type) {
+    public static int createShader(int type) {
         try {
             return (int) glCreateShader.invokeExact(type);
         } catch (Throwable th) {
@@ -872,7 +844,7 @@ public class OpenGL {
         }
     }
 
-    public void shaderSource(int shader, int count, MemoryAddress source, MemoryAddress length) {
+    public static void shaderSource(int shader, int count, MemoryAddress source, MemoryAddress length) {
         try {
             glShaderSource.invoke(shader, count, source, length);
         } catch (Throwable th) {
@@ -881,7 +853,7 @@ public class OpenGL {
         }
     }
 
-    public void compileShader(int shader) {
+    public static void compileShader(int shader) {
         try {
             glCompileShader.invoke(shader);
         } catch (Throwable th) {
@@ -890,7 +862,7 @@ public class OpenGL {
         }
     }
 
-    public void getShaderiv(int shader, int pname, MemoryAddress params) {
+    public static void getShaderiv(int shader, int pname, MemoryAddress params) {
         try {
             glGetShaderiv.invoke(shader, pname, params);
         } catch (Throwable th) {
@@ -899,7 +871,7 @@ public class OpenGL {
         }
     }
 
-    public void getShaderInfoLog(int shader, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
+    public static void getShaderInfoLog(int shader, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
         try {
             glGetShaderInfoLog.invoke(shader, bufSize, length, infoLog);
         } catch (Throwable th) {
@@ -908,7 +880,7 @@ public class OpenGL {
         }
     }
 
-    public void deleteShader(int shader) {
+    public static void deleteShader(int shader) {
         try {
             glDeleteShader.invoke(shader);
         } catch (Throwable th) {
@@ -917,7 +889,7 @@ public class OpenGL {
         }
     }
 
-    public int createProgram() {
+    public static int createProgram() {
         try {
             return (int) glCreateProgram.invoke();
         } catch (Throwable th) {
@@ -925,7 +897,7 @@ public class OpenGL {
         }
     }
 
-    public void attachShader(int program, int shader) {
+    public static void attachShader(int program, int shader) {
         try {
             glAttachShader.invoke(program, shader);
         } catch (Throwable th) {
@@ -934,7 +906,7 @@ public class OpenGL {
         }
     }
 
-    public void linkProgram(int program) {
+    public static void linkProgram(int program) {
         try {
             glLinkProgram.invoke(program);
         } catch (Throwable th) {
@@ -943,7 +915,7 @@ public class OpenGL {
         }
     }
 
-    public void getProgramiv(int program, int pname, MemoryAddress params) {
+    public static void getProgramiv(int program, int pname, MemoryAddress params) {
         try {
             glGetProgramiv.invoke(program, pname, params);
         } catch (Throwable th) {
@@ -952,7 +924,7 @@ public class OpenGL {
         }
     }
 
-    public void getProgramInfoLog(int program, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
+    public static void getProgramInfoLog(int program, int bufSize, MemoryAddress length, MemoryAddress infoLog) {
         try {
             glGetProgramInfoLog.invoke(program, bufSize, length, infoLog);
         } catch (Throwable th) {
@@ -961,7 +933,7 @@ public class OpenGL {
         }
     }
 
-    public void useProgram(int program) {
+    public static void useProgram(int program) {
         try {
             glUseProgram.invoke(program);
         } catch (Throwable th) {
@@ -970,7 +942,7 @@ public class OpenGL {
         }
     }
 
-    public void createVertexArrays(int n, MemoryAddress arrays) {
+    public static void createVertexArrays(int n, MemoryAddress arrays) {
         try {
             glCreateVertexArrays.invoke(n, arrays);
         } catch (Throwable th) {
@@ -979,7 +951,7 @@ public class OpenGL {
         }
     }
 
-    public void bindVertexArray(int array) {
+    public static void bindVertexArray(int array) {
         try {
             glBindVertexArray.invoke(array);
         } catch (Throwable th) {
@@ -988,7 +960,7 @@ public class OpenGL {
         }
     }
 
-    public void createBuffers(int n, MemoryAddress buffers) {
+    public static void createBuffers(int n, MemoryAddress buffers) {
         try {
             glCreateBuffers.invoke(n, buffers);
         } catch (Throwable th) {
@@ -997,7 +969,7 @@ public class OpenGL {
         }
     }
 
-    public void bindBuffer(int target, int buffer) {
+    public static void bindBuffer(int target, int buffer) {
         try {
             glBindBuffer.invoke(target, buffer);
         } catch (Throwable th) {
@@ -1006,7 +978,7 @@ public class OpenGL {
         }
     }
 
-    public void bufferData(int target, long size, MemoryAddress data, int usage) {
+    public static void bufferData(int target, long size, MemoryAddress data, int usage) {
         try {
             glBufferData.invoke(target, size, data, usage);
         } catch (Throwable th) {
@@ -1015,7 +987,7 @@ public class OpenGL {
         }
     }
 
-    public void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) {
+    public static void vertexAttribPointer(int index, int size, int type, int normalized, int stride, MemoryAddress pointer) {
         try {
             glVertexAttribPointer.invoke(index, size, type, normalized, stride, pointer);
         } catch (Throwable th) {
@@ -1024,7 +996,7 @@ public class OpenGL {
         }
     }
 
-    public void disableVertexAttribArray(int index) {
+    public static void disableVertexAttribArray(int index) {
         try {
             glDisableVertexAttribArray.invoke(index);
         } catch (Throwable th) {
@@ -1033,7 +1005,7 @@ public class OpenGL {
         }
     }
 
-    public void enableVertexAttribArray(int index) {
+    public static void enableVertexAttribArray(int index) {
         try {
             glEnableVertexAttribArray.invoke(index);
         } catch (Throwable th) {
@@ -1042,7 +1014,7 @@ public class OpenGL {
         }
     }
 
-    public void clear(int mask) {
+    public static void clear(int mask) {
         try {
             glClear.invoke(mask);
         } catch (Throwable th) {
@@ -1051,7 +1023,7 @@ public class OpenGL {
         }
     }
 
-    public void drawArrays(int mode, int first, int count) {
+    public static void drawArrays(int mode, int first, int count) {
         try {
             glDrawArrays.invoke(mode, first, count);
         } catch (Throwable th) {
@@ -1060,7 +1032,7 @@ public class OpenGL {
         }
     }
 
-    public void drawElements(int mode, int count, int type, MemoryAddress indices) {
+    public static void drawElements(int mode, int count, int type, MemoryAddress indices) {
         try {
             glDrawElements.invoke(mode, count, type, indices);
         } catch (Throwable th) {

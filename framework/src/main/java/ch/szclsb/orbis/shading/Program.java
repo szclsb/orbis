@@ -6,16 +6,14 @@ import ch.szclsb.orbis.foreign.ForeignInt;
 
 import java.lang.foreign.MemoryAddress;
 
-import static ch.szclsb.orbis.driver.foreign.OpenGL.GL_FALSE;
-import static ch.szclsb.orbis.driver.foreign.OpenGL.GL_LINK_STATUS;
+import static ch.szclsb.orbis.driver.foreign.OpenGL.*;
+
 
 public class Program {
-    private final OpenGL gl;
     private final int id;
 
-    public Program(OpenGL gl) {
-        this.gl = gl;
-        this.id = gl.createProgram();
+    public Program() {
+        this.id = createProgram();
     }
 
     public int id() {
@@ -23,19 +21,19 @@ public class Program {
     }
 
     public void attachShader(Shader shader) {
-        gl.attachShader(id, shader.id());
+        OpenGL.attachShader(id, shader.id());
     }
 
     public void link(ForeignInt success, ForeignCharArray infoLog) throws LinkException {
-        gl.linkProgram(id);
-        gl.getProgramiv(id, GL_LINK_STATUS, success.address());
+        linkProgram(id);
+        getProgramiv(id, GL_LINK_STATUS, success.address());
         if (success.get() == GL_FALSE) {
-            gl.getProgramInfoLog(id, infoLog.count(), MemoryAddress.NULL, infoLog.address());
+            getProgramInfoLog(id, infoLog.count(), MemoryAddress.NULL, infoLog.address());
             throw new LinkException(id, infoLog.getString());
         }
     }
 
     public void use() {
-        gl.useProgram(id);
+        useProgram(id);
     }
 }

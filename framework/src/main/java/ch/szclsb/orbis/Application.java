@@ -3,16 +3,15 @@ package ch.szclsb.orbis;
 import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.driver.foreign.Introspector;
 import ch.szclsb.orbis.driver.foreign.OpenGL;
+import ch.szclsb.orbis.foreign.ForeignString;
+import ch.szclsb.orbis.window.Window;
+import ch.szclsb.orbis.window.WindowException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.foreign.MemorySession;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,11 +46,8 @@ public abstract class Application {
                 var app = appClass.getConstructor().newInstance();
 
                 Introspector.loadLibraries();
-                try (var session = MemorySession.openShared()) {
-                    var glfw = new GLFW();
-                    var gl = new OpenGL();
-
-                    app.run(session, glfw, gl);
+                try {
+                    app.run();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -70,5 +66,21 @@ public abstract class Application {
         }
     }
 
-    protected abstract void run(MemorySession session, GLFW glfw, OpenGL gl) throws Exception;
+    protected Window openWindow(int width, int height, String title) throws WindowException {
+        if (GLFW.init() == 0) {
+            throw new RuntimeException("Unable to initialize GLFW");
+        }
+        Window window;
+        try(var windowSession = MemorySession.openConfined()) {
+            var titleSegment = new ForeignString(windowSession, title);
+            window = new Window(width, height, titleSegment);
+        }
+        window.makeCurrent();
+        if (OpenGL.load() == 0) {
+            throw new RuntimeException("Unable to initialize OpenGL");
+        }
+        return window;
+    }
+
+    protected abstract void run() throws Exception;
 }

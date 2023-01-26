@@ -1,31 +1,30 @@
 package ch.szclsb.orbis.window;
 
-import ch.szclsb.orbis.driver.foreign.GLFW;
 import ch.szclsb.orbis.foreign.ForeignString;
 
 import java.lang.foreign.MemoryAddress;
 
+import static ch.szclsb.orbis.driver.foreign.GLFW.*;
+
 public class Window {
-    private final GLFW glfw;
     private final MemoryAddress address;
 
-    public Window(GLFW glfw, int width, int height, ForeignString title) throws WindowException {
-        this.glfw = glfw;
-        this.address = glfw.createWindow(width, height, title.address(), MemoryAddress.NULL, MemoryAddress.NULL);
+    public Window(int width, int height, ForeignString title) throws WindowException {
+        this.address = createWindow(width, height, title.address(), MemoryAddress.NULL, MemoryAddress.NULL);
         if (address == MemoryAddress.NULL) {
             throw new WindowException();
         }
     }
 
     public void makeCurrent() {
-        glfw.makeContextCurrent(address);
+        makeContextCurrent(address);
     }
 
     public boolean shouldClose() {
-        return glfw.windowShouldClose(address) == 1;
+        return windowShouldClose(address) == 1;
     }
 
     public void swapBuffer() {
-        glfw.swapBuffers(address);
+        swapBuffers(address);
     }
 }
